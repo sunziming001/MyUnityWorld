@@ -6,10 +6,22 @@ namespace GameCtrl
 { 
     public class AbsInputCtrl : MonoBehaviour
     {
-        protected delegate bool InputJudge();
+        protected delegate void ParamCollector(in ActionParam param);
 
-        protected List<KeyValuePair<AbsAction, InputJudge>> action2InputJudge;
+        protected List<KeyValuePair<AbsAction, ParamCollector>> action2InputJudge = new List<KeyValuePair<AbsAction, ParamCollector>>();
 
+        //test function
+        void MoveInput(in ActionParam param)
+        {
+            if(Input.GetKey(KeyCode.W))
+            {
+                param.isValid = true;
+            }
+            else 
+            {
+                param.isValid = false;
+            }
+        }
 
         void Awake()
         {
@@ -18,12 +30,13 @@ namespace GameCtrl
 
         protected virtual void initialAction2InputJudge()
         {
-
+            MoveAction action = GetComponent<MoveAction>();
+            appendAction2InputJudge(action, MoveInput);
         }
 
-        protected void appendAction2InputJudge(AbsAction action, InputJudge judge)
+        protected void appendAction2InputJudge(AbsAction action, ParamCollector judge)
         {
-            KeyValuePair<AbsAction, InputJudge> pair = new KeyValuePair<AbsAction, InputJudge>(action, judge);
+            KeyValuePair<AbsAction, ParamCollector> pair = new KeyValuePair<AbsAction, ParamCollector>(action, judge);
             action2InputJudge.Add(pair);
             
         }
@@ -47,25 +60,20 @@ namespace GameCtrl
 
         private void triggerActions()
         {
-            action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, InputJudge> pair)
+            action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
             {
-                InputJudge inputJudge = pair.Value;
+                ParamCollector inputJudge = pair.Value;
                 AbsAction action = pair.Key;
-                if (inputJudge())
-                {
-                    action.trigger(true);
-                }
-                else
-                {
-                    action.trigger(false);
-                }
-
+                ActionParam param =  action.GetActionParam();
+                inputJudge(param);
+                action.trigger(param);
+               
             });
         }
 
         private void executeActions()
         {
-            action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, InputJudge> pair)
+            action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
             {
           
                 AbsAction action = pair.Key;

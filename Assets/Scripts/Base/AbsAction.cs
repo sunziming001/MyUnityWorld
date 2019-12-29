@@ -5,12 +5,47 @@ using UnityEngine;
 
 namespace GameCtrl
 {
-	public class AbsAction
+	public class ActionParam
+	{
+		public bool isValid = false;
+		private Dictionary<string, Object> data;
+		public void PutParam(string key, Object val)
+		{
+			data.Add(key, val);
+		}
+
+		public Object GetParam(string key)
+		{
+			Object ret =null;
+			data.TryGetValue(key, out ret);
+			return ret;
+		}
+
+	}
+
+	public class AbsAction : MonoBehaviour
 	{
 
 		private bool isTriggered = false;
 		private bool isBreakableByInput = true;
 		private float msSinceTrigged = 0;
+
+		private ActionParam actionParam = new ActionParam();
+
+		public void SetActionParam(ActionParam param)
+		{
+			actionParam = param;
+		}
+
+		public ActionParam GetActionParam()
+		{
+			return actionParam;
+		}
+
+		public void SetIsBreakableByInput(bool v)
+		{
+			isBreakableByInput = v;
+		}
 
 		virtual protected void OnActionUntriggered()
 		{
@@ -32,10 +67,8 @@ namespace GameCtrl
 
 		virtual protected void OnActionExecute()
 		{
-			if(isTriggered)
-			{
-				msSinceTrigged += Time.deltaTime;
-			}
+			msSinceTrigged += Time.deltaTime;
+			
 		}
 
 		virtual protected void OnActionFinished()
@@ -47,13 +80,18 @@ namespace GameCtrl
 
 		public void execute()
 		{
-			OnActionExecute();
+			if (isTriggered)
+			{
+				OnActionExecute();
+			}
+			
 		}
 
-		public void trigger(bool v)
+		public void trigger(ActionParam param)
 		{
-			if (v)
+			if (param.isValid)
 			{
+				SetActionParam(param);
 				OnActionTriggered();
 			}
 			else 
