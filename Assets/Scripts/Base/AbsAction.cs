@@ -8,16 +8,23 @@ namespace GameCtrl
 	public class ActionParam
 	{
 		public bool isValid = false;
-		private Dictionary<string, Object> data;
-		public void PutParam(string key, Object val)
+		private Dictionary<string, object> data = new Dictionary<string, object>();
+		public void PutParam(string key, object val)
 		{
+			data.Remove(key);
 			data.Add(key, val);
 		}
 
-		public Object GetParam(string key)
+		
+		public T GetParam<T>(string key)
 		{
-			Object ret =null;
-			data.TryGetValue(key, out ret);
+			T ret = default(T);
+			object obj;
+			bool hasValue = data.TryGetValue(key, out obj);
+			if(hasValue && obj.GetType() == typeof(T))
+			{
+				ret = (T)obj;
+			}
 			return ret;
 		}
 
@@ -31,6 +38,11 @@ namespace GameCtrl
 		private float msSinceTrigged = 0;
 
 		private ActionParam actionParam = new ActionParam();
+
+		static public void SetActionParamValid(in ActionParam param, bool v)
+		{
+			param.isValid = v;
+		}
 
 		public void SetActionParam(ActionParam param)
 		{

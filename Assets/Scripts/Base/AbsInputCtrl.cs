@@ -10,28 +10,16 @@ namespace GameCtrl
 
         protected List<KeyValuePair<AbsAction, ParamCollector>> action2InputJudge = new List<KeyValuePair<AbsAction, ParamCollector>>();
 
-        //test function
-        void MoveInput(in ActionParam param)
-        {
-            if(Input.GetKey(KeyCode.W))
-            {
-                param.isValid = true;
-            }
-            else 
-            {
-                param.isValid = false;
-            }
-        }
+
 
         void Awake()
         {
-            initialAction2InputJudge();
+            InitialAction2InputJudge();
         }
 
-        protected virtual void initialAction2InputJudge()
+        protected virtual void InitialAction2InputJudge()
         {
-            MoveAction action = GetComponent<MoveAction>();
-            appendAction2InputJudge(action, MoveInput);
+ 
         }
 
         protected void appendAction2InputJudge(AbsAction action, ParamCollector judge)
@@ -71,7 +59,7 @@ namespace GameCtrl
             });
         }
 
-        private void executeActions()
+        protected void executeActions()
         {
             action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
             {
