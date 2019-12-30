@@ -7,7 +7,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 {
 
 	public float disStep = 0.2f;
-	public float angleStep = 0.2f;
+	public float angleStep = 1.0f;
 
 	private bool isRightMousePress = false;
 
@@ -33,7 +33,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 	{
 		MoveAction.SetActionParamValid(param, false);
 
-		float theta = transform.eulerAngles.x / 180.0f * Mathf.PI;
+		float theta = GetCameraDepresion();
 
 		if (Input.GetKey(KeyCode.W))
 		{
@@ -50,16 +50,10 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 		if (Input.GetKey(KeyCode.D))
 		{
 			MoveAction.SetActionParamValid(param, true);
-			MoveAction.SetSelfTranslate(param, new Vector3(disStep,0,0));
+			MoveAction.SetWorldRotation(param, new Vector3(0, -1 * disStep, 0));
 		}
 
 		if (Input.GetKey(KeyCode.A))
-		{
-			MoveAction.SetActionParamValid(param, true);
-			MoveAction.SetSelfTranslate(param, new Vector3(-1 * disStep,0,0));
-		}
-
-		if (Input.GetKey(KeyCode.E))
 		{
 			MoveAction.SetActionParamValid(param, true);
 			MoveAction.SetWorldRotation(param, new Vector3(0, disStep, 0));
@@ -67,14 +61,79 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 
 		if (Input.GetKey(KeyCode.Q))
 		{
+			
 			MoveAction.SetActionParamValid(param, true);
-			MoveAction.SetWorldRotation(param, new Vector3(0, -1 * disStep,  0));
+
+			Vector3 focusPt = GetCameraLandFocus();
+			Vector3 axis = new Vector3(0, 1, 0);
+			float angle = angleStep;
+
+			MoveAction.SetRotateAround(param, focusPt, axis, angle);
 		}
+
+		if (Input.GetKey(KeyCode.E))
+		{
+			MoveAction.SetActionParamValid(param, true);
+
+			Vector3 focusPt = GetCameraLandFocus();
+			Vector3 axis = new Vector3(0, 1, 0);
+			float angle =-1* angleStep;
+
+			MoveAction.SetRotateAround(param, focusPt, axis, angle);
+		}
+
+		if(Input.GetKey(KeyCode.I))
+		{
+			MoveAction.SetActionParamValid(param, true);
+
+			Vector3 focusPt = GetCameraLandFocus();
+			Vector3 axis = new Vector3(1, 0, 0);
+			float angle = angleStep;
+
+			MoveAction.SetRotateAround(param, focusPt, axis, angle);
+		}
+
+		if (Input.GetKey(KeyCode.K))
+		{
+			MoveAction.SetActionParamValid(param, true);
+
+			Vector3 focusPt = GetCameraLandFocus();
+			Vector3 axis = new Vector3(1, 0, 0);
+			float angle = -1*angleStep;
+
+			MoveAction.SetRotateAround(param, focusPt, axis, angle);
+		}
+
 	}
 
 	protected override void InitialAction2InputJudge()
 	{
 		MoveAction moveAction = GetComponent<MoveAction>();
 		appendAction2InputJudge(moveAction, MoveInput);
+	}
+
+
+	private float GetCameraDepresion()
+	{
+		float theta = transform.eulerAngles.x / 180.0f * Mathf.PI;
+		return theta;
+	}
+
+	private float GetCameraHeight()
+	{
+		return transform.position.y;
+	}
+
+	private Vector3 GetCameraLandFocus()
+	{
+		float theta = GetCameraDepresion();
+		float height = GetCameraHeight();
+		float d = height / Mathf.Tan(theta);
+
+		Vector3 curPos = transform.position;
+		Matrix4x4 m = Matrix4x4.Translate(new Vector3(0,height,d));
+
+
+		return m.MultiplyPoint3x4(curPos);
 	}
 }
