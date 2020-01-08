@@ -9,6 +9,12 @@ namespace GameCtrl
 	{
 		public bool isValid = false;
 		private Dictionary<string, object> data = new Dictionary<string, object>();
+
+		public void ClearParam()
+		{
+			data.Clear();
+		}
+
 		public void PutParam(string key, object val)
 		{
 			data.Remove(key);
@@ -42,6 +48,11 @@ namespace GameCtrl
 		static public void SetActionParamValid(in ActionParam param, bool v)
 		{
 			param.isValid = v;
+		}
+
+		static public void ClearActionParam(in ActionParam param)
+		{
+			param.ClearParam();
 		}
 
 		public void SetActionParam(ActionParam param)

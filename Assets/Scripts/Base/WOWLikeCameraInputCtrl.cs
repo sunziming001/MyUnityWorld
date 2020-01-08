@@ -38,24 +38,28 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 		if (Input.GetKey(KeyCode.W))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 			MoveAction.SetSelfTranslate(param, new Vector3(0, disStep * Mathf.Sin(theta), disStep * Mathf.Cos(theta)));
 		}
 
 		if (Input.GetKey(KeyCode.S))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 			MoveAction.SetSelfTranslate(param, new Vector3(0, -1 * disStep * Mathf.Sin(theta), -1 * disStep * Mathf.Cos(theta)));
 		}
 
 		if (Input.GetKey(KeyCode.D))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 			MoveAction.SetWorldRotation(param, new Vector3(0, -1 * disStep, 0));
 		}
 
 		if (Input.GetKey(KeyCode.A))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 			MoveAction.SetWorldRotation(param, new Vector3(0, disStep, 0));
 		}
 
@@ -63,6 +67,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 		{
 			
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 
 			Vector3 focusPt = GetCameraLandFocus();
 			Vector3 axis = new Vector3(0, 1, 0);
@@ -74,6 +79,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 		if (Input.GetKey(KeyCode.E))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 
 			Vector3 focusPt = GetCameraLandFocus();
 			Vector3 axis = new Vector3(0, 1, 0);
@@ -85,6 +91,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 		if(Input.GetKey(KeyCode.I))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 
 			Vector3 focusPt = GetCameraLandFocus();
 			Vector3 axis = new Vector3(1, 0, 0);
@@ -96,6 +103,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 		if (Input.GetKey(KeyCode.K))
 		{
 			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
 
 			Vector3 focusPt = GetCameraLandFocus();
 			Vector3 axis = new Vector3(1, 0, 0);
