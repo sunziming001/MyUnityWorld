@@ -59,6 +59,8 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	{
 		AnimatorAction.SetActionParamValid(param, true);
 		bool isMoving = false;
+		
+
 		if (Input.GetKey(KeyCode.UpArrow))
 		{
 			isMoving = true;
@@ -67,11 +69,17 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		{
 			isMoving = true;
 		}
-		else
+		else if(Input.GetKey(KeyCode.Alpha0))
 		{
-			
+			AnimatorAction.SetWeaponType(param, AnimatorAction.WeaponType.Relax);
 		}
+		else if(Input.GetKey(KeyCode.Alpha1))
+		{
+			AnimatorAction.SetWeaponType(param, AnimatorAction.WeaponType.TwoHandSword);
+		}
+
 		AnimatorAction.SetIsMoving(param, isMoving);
+
 	}
 
 	protected override void InitialAction2InputJudge()

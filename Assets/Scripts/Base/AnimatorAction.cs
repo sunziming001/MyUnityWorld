@@ -7,7 +7,14 @@ namespace GameCtrl
 
 	public class AnimatorAction : AbsAction
 	{
-		private static string KeyIsMoving = "isMoving";
+		private static string KeyIsMoving = "KeyIsMoving";
+		private static string KeySetWeaponType = "KeySetWeaponType";
+
+		public enum WeaponType
+		{
+			Relax = 0,
+			TwoHandSword = 1,
+		};
 
 		AnimatorAction()
 		{
@@ -24,15 +31,27 @@ namespace GameCtrl
 			return param.GetParam<bool>(AnimatorAction.KeyIsMoving);
 		}
 
+		public static void SetWeaponType(in ActionParam param, WeaponType weaponTyp)
+		{
+			param.PutParam(AnimatorAction.KeySetWeaponType, weaponTyp);
+		}
+
+		public static WeaponType GetWeaponType(ActionParam param)
+		{
+			return param.GetParam<WeaponType>(AnimatorAction.KeySetWeaponType);
+		}
+
 		protected override void OnActionExecute()
 		{
 			base.OnActionExecute();
 
 			ActionParam param = GetActionParam();
 			bool isMoving = GetIsMoving(param);
+			WeaponType weaponType = GetWeaponType(param);
 
 			Animator anim = GetComponent<Animator>();
 			anim.SetBool("isMoving", isMoving);
+			anim.SetInteger("WeaponType", (int)weaponType);
 		}
 	}
 }
