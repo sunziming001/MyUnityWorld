@@ -5,6 +5,10 @@ using GameCtrl;
 
 public class CharacterInputCtrl :  AbsInputCtrl
 {
+
+	public float disStep = 1.0f;
+	public float angleStep = 1.0f;
+
 	void Awake()
 	{
 		InitialAction2InputJudge();
@@ -20,31 +24,63 @@ public class CharacterInputCtrl :  AbsInputCtrl
 
 	}
 
-	// Start is called before the first frame update
-	void Start()
-	{
-
-	}
-
-	void Update()
-	{
-		executeActions();
-	}
-
 	void MoveInput(in ActionParam param)
 	{
-		AnimatorAction.SetActionParamValid(param, false);
+		MoveAction.SetActionParamValid(param, false);
 
-		if (Input.GetKey(KeyCode.W))
+		if (Input.GetKey(KeyCode.UpArrow))
 		{
-			AnimatorAction.SetActionParamValid(param, true);
-			AnimatorAction.ClearActionParam(param);
+			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
+			MoveAction.SetSelfTranslate(param, new Vector3(0, 0 , disStep));
 		}
+		else if (Input.GetKey(KeyCode.DownArrow))
+		{
+			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
+			MoveAction.SetSelfTranslate(param, new Vector3(0, 0, -1*disStep));
+		}
+		else if (Input.GetKey(KeyCode.LeftArrow))
+		{
+			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
+			MoveAction.SetSelfRotation(param, new Vector3(0, -1*angleStep, 0));
+		}
+		else if (Input.GetKey(KeyCode.RightArrow))
+		{
+			MoveAction.SetActionParamValid(param, true);
+			MoveAction.ClearActionParam(param);
+			MoveAction.SetSelfRotation(param, new Vector3(0, angleStep, 0));
+		}
+	}
+
+
+	void AnimatorInput(in ActionParam param)
+	{
+		AnimatorAction.SetActionParamValid(param, true);
+		bool isMoving = false;
+		if (Input.GetKey(KeyCode.UpArrow))
+		{
+			isMoving = true;
+		}
+		else if (Input.GetKey(KeyCode.DownArrow))
+		{
+			isMoving = true;
+		}
+		else
+		{
+			
+		}
+		AnimatorAction.SetIsMoving(param, isMoving);
 	}
 
 	protected override void InitialAction2InputJudge()
 	{
-		AnimatorAction moveAction = GetComponent<AnimatorAction>();
+		MoveAction moveAction = GetComponent<MoveAction>();
+		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
+
+		
+		appendAction2InputJudge(animatorAction, AnimatorInput);
 		appendAction2InputJudge(moveAction, MoveInput);
 	}
 }

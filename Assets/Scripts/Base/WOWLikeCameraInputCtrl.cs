@@ -22,12 +22,6 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-		executeActions();
-	}
-
 	//test function
 	void MoveInput(in ActionParam param)
 	{

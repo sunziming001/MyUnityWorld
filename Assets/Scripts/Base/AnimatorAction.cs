@@ -7,7 +7,7 @@ namespace GameCtrl
 
 	public class AnimatorAction : AbsAction
 	{
-		private static string KeyIsMoving = "IsMoving";
+		private static string KeyIsMoving = "isMoving";
 
 		AnimatorAction()
 		{
@@ -32,7 +32,7 @@ namespace GameCtrl
 			bool isMoving = GetIsMoving(param);
 
 			Animator anim = GetComponent<Animator>();
-			anim.SetBool("IsMoving", isMoving);
+			anim.SetBool("isMoving", isMoving);
 		}
 	}
 }
