@@ -27,6 +27,11 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	void MoveInput(in ActionParam param)
 	{
 		MoveAction.SetActionParamValid(param, false);
+		if(isMoveable() == false)
+		{
+			return;
+		}
+
 
 		if (Input.GetKey(KeyCode.UpArrow))
 		{
@@ -60,16 +65,20 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		AnimatorAction.SetActionParamValid(param, true);
 		bool isMoving = false;
 		
+		if(isMoveable())
+		{
+			if (Input.GetKey(KeyCode.UpArrow))
+			{
+				isMoving = true;
+			}
+			else if (Input.GetKey(KeyCode.DownArrow))
+			{
+				isMoving = true;
+			}
+		}
+		
 
-		if (Input.GetKey(KeyCode.UpArrow))
-		{
-			isMoving = true;
-		}
-		else if (Input.GetKey(KeyCode.DownArrow))
-		{
-			isMoving = true;
-		}
-		else if(Input.GetKey(KeyCode.Alpha0))
+		if(Input.GetKey(KeyCode.Alpha0))
 		{
 			AnimatorAction.SetWeaponType(param, AnimatorAction.WeaponType.Relax);
 		}
@@ -77,6 +86,16 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		{
 			AnimatorAction.SetWeaponType(param, AnimatorAction.WeaponType.TwoHandSword);
 		}
+
+		if(Input.GetKey(KeyCode.Z))
+		{
+			AnimatorAction.SetStartAttack(param, true);
+		}
+		else
+		{
+			AnimatorAction.SetStartAttack(param, false);
+		}
+		
 
 		AnimatorAction.SetIsMoving(param, isMoving);
 
@@ -90,5 +109,11 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		
 		appendAction2InputJudge(animatorAction, AnimatorInput);
 		appendAction2InputJudge(moveAction, MoveInput);
+	}
+
+	private bool isMoveable()
+	{
+		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
+		return animatorAction.isMoveable();
 	}
 }

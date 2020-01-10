@@ -9,6 +9,11 @@ namespace GameCtrl
 	{
 		private static string KeyIsMoving = "KeyIsMoving";
 		private static string KeySetWeaponType = "KeySetWeaponType";
+		private static string KeyStartAttack = "KeyStartAttack";
+
+		private bool isMoving = false;
+		private WeaponType weaponType = WeaponType.Relax;
+		private bool isDuringAttack = false;
 
 		public enum WeaponType
 		{
@@ -41,17 +46,55 @@ namespace GameCtrl
 			return param.GetParam<WeaponType>(AnimatorAction.KeySetWeaponType);
 		}
 
+		public static void SetStartAttack(in ActionParam param, bool isStart)
+		{
+			param.PutParam(AnimatorAction.KeyStartAttack, isStart);
+		}
+
+		public static bool GetStartAttack(ActionParam param)
+		{
+			return param.GetParam<bool>(AnimatorAction.KeyStartAttack);
+		}
+
+		
+		void OnAttackFinished()
+		{
+			isDuringAttack = false;
+			Animator anim = GetComponent<Animator>();
+			anim.SetTrigger("AttackFinished");
+			anim.ResetTrigger("StartAttack");
+		}
+
+		void Hit()
+		{
+			
+		}
+
+		public bool isMoveable()
+		{
+			return !isDuringAttack;
+		}
+
 		protected override void OnActionExecute()
 		{
 			base.OnActionExecute();
 
 			ActionParam param = GetActionParam();
-			bool isMoving = GetIsMoving(param);
-			WeaponType weaponType = GetWeaponType(param);
+			isMoving = GetIsMoving(param);
+			bool isStartAttack = GetStartAttack(param);
+			weaponType = GetWeaponType(param);
 
 			Animator anim = GetComponent<Animator>();
 			anim.SetBool("isMoving", isMoving);
 			anim.SetInteger("WeaponType", (int)weaponType);
+
+			if(isStartAttack)
+			{
+				isDuringAttack = true;
+				anim.SetBool("isMoving", false);
+				anim.SetTrigger("StartAttack");
+				anim.ResetTrigger("AttackFinished");
+			}
 		}
 	}
 }
