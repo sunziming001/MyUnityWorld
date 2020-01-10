@@ -493,8 +493,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1b7d38cf0f61948885f203f2f12aee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepDis: 1
-  stepAngle: 1
 --- !u!114 &957479809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,15 +564,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400106, guid: 1d6dec27ae39bb447b8a0ada31d13664, type: 3}
       propertyPath: m_LocalScale.x
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400106, guid: 1d6dec27ae39bb447b8a0ada31d13664, type: 3}
       propertyPath: m_LocalScale.y
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400106, guid: 1d6dec27ae39bb447b8a0ada31d13664, type: 3}
       propertyPath: m_LocalScale.z
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 1d6dec27ae39bb447b8a0ada31d13664, type: 3}
       propertyPath: m_Controller
@@ -620,8 +618,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c60b296616bd94fbd0f2f4790459d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disStep: 1
-  angleStep: 1
+  disStep: 0.5
+  angleStep: 2
 --- !u!114 &1650529687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,5 +632,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1b7d38cf0f61948885f203f2f12aee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepDis: 1
-  stepAngle: 1

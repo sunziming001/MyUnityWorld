@@ -62,7 +62,6 @@ namespace GameCtrl
 			isDuringAttack = false;
 			Animator anim = GetComponent<Animator>();
 			anim.SetTrigger("AttackFinished");
-			anim.ResetTrigger("StartAttack");
 		}
 
 		void Hit()
@@ -88,12 +87,15 @@ namespace GameCtrl
 			anim.SetBool("isMoving", isMoving);
 			anim.SetInteger("WeaponType", (int)weaponType);
 
-			if(isStartAttack)
+			if(isStartAttack && weaponType != WeaponType.Relax)
 			{
 				isDuringAttack = true;
-				anim.SetBool("isMoving", false);
 				anim.SetTrigger("StartAttack");
 				anim.ResetTrigger("AttackFinished");
+			}
+			else
+			{
+				anim.ResetTrigger("StartAttack");
 			}
 		}
 	}

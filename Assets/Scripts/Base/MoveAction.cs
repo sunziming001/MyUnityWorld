@@ -8,8 +8,6 @@ namespace GameCtrl
 
     public class MoveAction :AbsAction
     {
-		public float stepDis = 1.0f;
-		public float stepAngle = 1.0f;
 
 		private const string KeySelfTrans = "SelfTrans";
 		private const string KeyWorldTrans = "WorldTrans";
