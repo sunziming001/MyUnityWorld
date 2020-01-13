@@ -6,18 +6,13 @@ using GameCtrl;
 
 [RequireComponent(typeof(MoveAction))]
 [RequireComponent(typeof(AnimatorAction))]
-
+[RequireComponent(typeof(Animator))]
 
 public class CharacterInputCtrl :  AbsInputCtrl
 {
 
 	public float disStep = 1.0f;
 	public float angleStep = 1.0f;
-
-	void Awake()
-	{
-		InitialAction2InputJudge();
-	}
 
 	void FootR()
 	{
@@ -85,11 +80,11 @@ public class CharacterInputCtrl :  AbsInputCtrl
 
 		if(Input.GetKey(KeyCode.Alpha0))
 		{
-			AnimatorAction.SetWeaponType(param, AnimatorAction.WeaponType.Relax);
+			AnimatorAction.SetWeaponType(param, WeaponType.Relax);
 		}
 		else if(Input.GetKey(KeyCode.Alpha1))
 		{
-			AnimatorAction.SetWeaponType(param, AnimatorAction.WeaponType.TwoHandSword);
+			AnimatorAction.SetWeaponType(param, WeaponType.TwoHandSword);
 		}
 
 		if(Input.GetKey(KeyCode.Z))
@@ -106,13 +101,48 @@ public class CharacterInputCtrl :  AbsInputCtrl
 
 	}
 
+	void WeaponInput(in ActionParam param)
+	{
+		WeaponAction.SetActionParamValid(param, true);
+		WeaponAction.WeaponInfo info;
+		
+
+		if (Input.GetKey(KeyCode.Alpha0))
+		{
+			info.handerType = HanderType.None;
+			info.leftHandTransform = null;
+			info.rightHandTransform = null;
+			info.leftWeaponRes = null;
+			info.rightWeaponRes = null;
+			WeaponAction.SetWeaponInfo(param, info);
+
+		}
+		else if (Input.GetKey(KeyCode.Alpha1))
+		{
+			info.handerType = HanderType.RightHander;
+			info.leftHandTransform = null;
+			info.leftWeaponRes = null;
+
+			info.rightWeaponRes = "Weapon/2HandSword/2Hand-Sword";
+			info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
+
+			WeaponAction.SetWeaponInfo(param, info);
+		}
+		else
+		{
+			WeaponAction.SetActionParamValid(param, false);
+		}
+
+	}
+
 	protected override void InitialAction2InputJudge()
 	{
 		MoveAction moveAction = GetComponent<MoveAction>();
 		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
-
+		WeaponAction weaponAction = GetComponent<WeaponAction>();
 		
 		appendAction2InputJudge(animatorAction, AnimatorInput);
+		appendAction2InputJudge(weaponAction, WeaponInput);
 		appendAction2InputJudge(moveAction, MoveInput);
 	}
 

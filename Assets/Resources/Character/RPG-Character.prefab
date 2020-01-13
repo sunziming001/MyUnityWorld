@@ -305,8 +305,9 @@ GameObject:
   - component: {fileID: 8646758365398164715}
   - component: {fileID: 8646758365398164714}
   - component: {fileID: 8646758365398164716}
+  - component: {fileID: 2533203197457086671}
   m_Layer: 0
-  m_Name: RPG-Character-Blender
+  m_Name: RPG-Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -360,7 +361,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ikActive: 1
-  rightHandObj: {fileID: 0}
+  isRightHander: 1
+  handObj: {fileID: 0}
 --- !u!114 &8646758365398164715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,6 +401,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disStep: 1
   angleStep: 1
+--- !u!114 &2533203197457086671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8646758365398164719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9573ac050cbb394ea05b9de094ca2ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8646758365398164737
 GameObject:
   m_ObjectHideFlags: 0

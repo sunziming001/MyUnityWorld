@@ -12,4 +12,17 @@ namespace GameCtrl
 		UI			= 3
 
 	}
+
+	public enum WeaponType
+	{
+		Relax = 0,
+		TwoHandSword = 1,
+	};
+
+	public enum HanderType
+	{
+		None = 0,
+		RightHander = 1,
+		LeftHander = 2,
+	}
 }

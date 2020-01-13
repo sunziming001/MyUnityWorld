@@ -15,11 +15,7 @@ namespace GameCtrl
 		private WeaponType weaponType = WeaponType.Relax;
 		private bool isDuringAttack = false;
 
-		public enum WeaponType
-		{
-			Relax = 0,
-			TwoHandSword = 1,
-		};
+		
 
 		AnimatorAction()
 		{

@@ -12,7 +12,7 @@ namespace GameCtrl
 
 
 
-        void Awake()
+        public virtual void Awake()
         {
             InitialAction2InputJudge();
         }
