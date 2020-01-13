@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameCtrl;
 
+
+[RequireComponent(typeof(MoveAction))]
+[RequireComponent(typeof(AnimatorAction))]
+
+
 public class CharacterInputCtrl :  AbsInputCtrl
 {
 
