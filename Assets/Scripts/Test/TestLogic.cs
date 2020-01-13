@@ -29,8 +29,8 @@ public class TestLogic : MonoBehaviour
 			characterWeapon.transform.localPosition = rightHandTransform.localPosition - attachPoint.position;
 			characterWeapon.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-			IKCtrl ikCtrl = character.GetComponent<IKCtrl>();
-			ikCtrl.rightHandObj = characterWeapon.transform;
+			IKHandCtrl ikCtrl = character.GetComponent<IKHandCtrl>();
+			ikCtrl.handObj = characterWeapon.transform;
 
 
 

@@ -4,13 +4,14 @@ using System.Collections;
 
 [RequireComponent(typeof(Animator))]
 
-public class IKCtrl : MonoBehaviour
+public class IKHandCtrl : MonoBehaviour
 {
 
 	protected Animator animator;
 
 	public bool ikActive = false;
-	public Transform rightHandObj = null;
+	public bool isRightHander = true;
+	public Transform handObj = null;
 
 	void Start()
 	{
@@ -23,19 +24,24 @@ public class IKCtrl : MonoBehaviour
 		if (animator)
 		{
 
+			AvatarIKGoal curIKGoal = AvatarIKGoal.LeftHand;
+			if(!isRightHander)
+			{
+				curIKGoal = AvatarIKGoal.RightHand;
+			}
 			//if the IK is active, set the position and rotation directly to the goal.
 			if (ikActive)
 			{
 
 				//weight = 1.0 for the right hand means position and rotation will be at the IK goal (the place the character wants to grab)
-				animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1.0f);
-				animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1.0f);
+				animator.SetIKPositionWeight(curIKGoal, 1.0f);
+				animator.SetIKRotationWeight(curIKGoal, 1.0f);
 
 				//set the position and the rotation of the right hand where the external object is
-				if (rightHandObj != null)
+				if (handObj != null)
 				{
-					animator.SetIKPosition(AvatarIKGoal.LeftHand, rightHandObj.position);
-					animator.SetIKRotation(AvatarIKGoal.LeftHand, rightHandObj.rotation);
+					animator.SetIKPosition(curIKGoal, handObj.position);
+					animator.SetIKRotation(curIKGoal, handObj.rotation);
 				}
 
 			}
