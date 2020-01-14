@@ -11,8 +11,9 @@ public class TestLogic : MonoBehaviour
     void Start()
     {
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
-		//GameObject weaponRes = Resources.Load<GameObject>("Weapon/2HandSword/2Hand-Sword");
-		if(characterRes)
+		UnityEditor.Animations.AnimatorController animatorController =  Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
+
+		if (characterRes && animatorController)
 		{
 			character = Instantiate(characterRes);
 			//characterWeapon = Instantiate(weaponRes);
@@ -20,16 +21,15 @@ public class TestLogic : MonoBehaviour
 			character.transform.localPosition = new Vector3(32, 0, 32);
 			character.transform.localScale = new Vector3(5, 5, 5);
 
+			character.AddComponent<CharacterInputCtrl>();
+			Animator animator = character.GetComponent<Animator>();
 
-			//Animator animator = character.GetComponent<Animator>();
-			//Transform rightHandTransform = animator.GetBoneTransform(HumanBodyBones.RightHand);
-			//Transform attachPoint = characterWeapon.transform.Find("AttachPoint");
-			//characterWeapon.transform.parent = rightHandTransform;
-			//characterWeapon.transform.localPosition = rightHandTransform.localPosition - attachPoint.position;
-			//characterWeapon.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+			if(animator)
+			{
+				animator.runtimeAnimatorController = animatorController;
 
-			//IKHandCtrl ikCtrl = character.GetComponent<IKHandCtrl>();
-			//ikCtrl.handObj = characterWeapon.transform;
+			}
+
 
 
 

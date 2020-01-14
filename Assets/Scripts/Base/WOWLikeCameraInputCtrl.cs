@@ -10,11 +10,6 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 	public float angleStep = 1.0f;
 
 
-	void Awake()
-	{
-		InitialAction2InputJudge();
-	}
-
 	// Start is called before the first frame update
 	void Start()
     {

@@ -6,6 +6,7 @@ using GameCtrl;
 
 [RequireComponent(typeof(MoveAction))]
 [RequireComponent(typeof(AnimatorAction))]
+[RequireComponent(typeof(WeaponAction))]
 [RequireComponent(typeof(Animator))]
 
 public class CharacterInputCtrl :  AbsInputCtrl
