@@ -17,7 +17,7 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
     }
 
 	//test function
-	void MoveInput(in ActionParam param)
+	void MoveInput(InputInfo inputInfo, in ActionParam param)
 	{
 		MoveAction.SetActionParamValid(param, false);
 

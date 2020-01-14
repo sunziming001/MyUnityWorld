@@ -6,7 +6,7 @@ namespace GameCtrl
 { 
     public class AbsInputCtrl : MonoBehaviour
     {
-        protected delegate void ParamCollector(in ActionParam param);
+        protected delegate void ParamCollector(InputInfo inputInfo, in ActionParam param);
 
         protected List<KeyValuePair<AbsAction, ParamCollector>> action2InputJudge = new List<KeyValuePair<AbsAction, ParamCollector>>();
 
@@ -48,12 +48,13 @@ namespace GameCtrl
 
         private void triggerActions()
         {
+			InputInfo info = InputManager.collectInputCmds();
             action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
             {
                 ParamCollector inputJudge = pair.Value;
                 AbsAction action = pair.Key;
                 ActionParam param =  action.GetActionParam();
-                inputJudge(param);
+                inputJudge(info, param);
                 action.trigger(param);
                
             });

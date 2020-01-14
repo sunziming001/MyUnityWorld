@@ -12,7 +12,7 @@ using GameCtrl;
 public class CharacterInputCtrl :  AbsInputCtrl
 {
 
-	public float disStep = 1.0f;
+	public float disStep = 0.3f;
 	public float angleStep = 1.0f;
 
 	void FootR()
@@ -25,70 +25,58 @@ public class CharacterInputCtrl :  AbsInputCtrl
 
 	}
 
-	void MoveInput(in ActionParam param)
+	void MoveInput(InputInfo inputInfo, in ActionParam param)
 	{
 		MoveAction.SetActionParamValid(param, false);
-		if(isMoveable() == false)
+		MoveAction.ClearActionParam(param);
+		if (isMoveable() == false)
 		{
 			return;
 		}
+		var cmd2Arg = inputInfo.cmd2Arg;
+		object tmpValue;
+		if (cmd2Arg.TryGetValue(InputCmd.Forword, out tmpValue))
+		{
+			MoveAction.SetActionParamValid(param, true);
+			float f = (float)tmpValue;
+			MoveAction.SetSelfTranslate(param, new Vector3(0, 0 , disStep*f));
+		}
 
 
-		if (Input.GetKey(KeyCode.UpArrow))
+		if (cmd2Arg.TryGetValue(InputCmd.Rightword, out tmpValue))
 		{
 			MoveAction.SetActionParamValid(param, true);
-			MoveAction.ClearActionParam(param);
-			MoveAction.SetSelfTranslate(param, new Vector3(0, 0 , disStep));
-		}
-		else if (Input.GetKey(KeyCode.DownArrow))
-		{
-			MoveAction.SetActionParamValid(param, true);
-			MoveAction.ClearActionParam(param);
-			MoveAction.SetSelfTranslate(param, new Vector3(0, 0, -1*disStep));
-		}
-		else if (Input.GetKey(KeyCode.LeftArrow))
-		{
-			MoveAction.SetActionParamValid(param, true);
-			MoveAction.ClearActionParam(param);
-			MoveAction.SetSelfRotation(param, new Vector3(0, -1*angleStep, 0));
-		}
-		else if (Input.GetKey(KeyCode.RightArrow))
-		{
-			MoveAction.SetActionParamValid(param, true);
-			MoveAction.ClearActionParam(param);
-			MoveAction.SetSelfRotation(param, new Vector3(0, angleStep, 0));
+			float f = (float)tmpValue;
+			MoveAction.SetSelfRotation(param, new Vector3(0, angleStep*f, 0));
 		}
 	}
 
 
-	void AnimatorInput(in ActionParam param)
+	void AnimatorInput(InputInfo inputInfo, in ActionParam param)
 	{
 		AnimatorAction.SetActionParamValid(param, true);
+
 		bool isMoving = false;
-		
-		if(isMoveable())
+		var cmd2Arg = inputInfo.cmd2Arg;
+		object tmpValue;
+
+		if (isMoveable()
+			&& cmd2Arg.TryGetValue(InputCmd.Forword, out tmpValue))
 		{
-			if (Input.GetKey(KeyCode.UpArrow))
-			{
-				isMoving = true;
-			}
-			else if (Input.GetKey(KeyCode.DownArrow))
-			{
-				isMoving = true;
-			}
+			isMoving = true;
 		}
 		
 
-		if(Input.GetKey(KeyCode.Alpha0))
+		if(cmd2Arg.TryGetValue(InputCmd.Relax, out tmpValue))
 		{
 			AnimatorAction.SetWeaponType(param, WeaponType.Relax);
 		}
-		else if(Input.GetKey(KeyCode.Alpha1))
+		else if(cmd2Arg.TryGetValue(InputCmd.EquipWeapon, out tmpValue))
 		{
 			AnimatorAction.SetWeaponType(param, WeaponType.TwoHandSword);
 		}
 
-		if(Input.GetKey(KeyCode.Z))
+		if(cmd2Arg.TryGetValue(InputCmd.LightAttack, out tmpValue))
 		{
 			AnimatorAction.SetStartAttack(param, true);
 		}
@@ -102,13 +90,14 @@ public class CharacterInputCtrl :  AbsInputCtrl
 
 	}
 
-	void WeaponInput(in ActionParam param)
+	void WeaponInput(InputInfo inputInfo, in ActionParam param)
 	{
 		WeaponAction.SetActionParamValid(param, true);
 		WeaponAction.WeaponInfo info;
-		
+		var cmd2Arg = inputInfo.cmd2Arg;
+		object tmp = null;
 
-		if (Input.GetKey(KeyCode.Alpha0))
+		if (cmd2Arg.TryGetValue(InputCmd.Relax, out tmp ))
 		{
 			info.handerType = HanderType.None;
 			info.leftHandTransform = null;
@@ -118,7 +107,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 			WeaponAction.SetWeaponInfo(param, info);
 
 		}
-		else if (Input.GetKey(KeyCode.Alpha1))
+		else if (cmd2Arg.TryGetValue(InputCmd.EquipWeapon, out tmp))
 		{
 			info.handerType = HanderType.RightHander;
 			info.leftHandTransform = null;

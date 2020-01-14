@@ -19,7 +19,7 @@ namespace GameCtrl
 		private string curLeftWeaponRes = null;
 		private GameObject rightWeapon = null;
 		private string curRightWeaponRes = null;
-
+		private bool isDuringEquip = false;
 
 		public struct WeaponInfo
 		{
@@ -30,7 +30,7 @@ namespace GameCtrl
 			public HanderType handerType;
 		}
 
-
+		
 
 		public static void SetWeaponInfo(in ActionParam param, WeaponInfo weaponInfo)
 		{
@@ -81,12 +81,11 @@ namespace GameCtrl
 
 			curLeftWeaponRes = weaponInfo.leftWeaponRes;
 			curRightWeaponRes = weaponInfo.rightWeaponRes;
-				
+			
 		}
 
 		private void LoadWeapon(in GameObject originWeaponObj, out GameObject weaponObj, string resource, Transform handTransform)
 		{
-			
 
 			if (originWeaponObj)
 			{
@@ -114,6 +113,7 @@ namespace GameCtrl
 					{
 						weaponObj.transform.parent = handTransform;
 						weaponObj.transform.localPosition = handTransform.localPosition - attachPoint.position;
+						weaponObj.transform.Rotate(handTransform.localRotation.eulerAngles+new Vector3(90,-90,0));
 						weaponObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
 						IKHandCtrl ikCtrl = GetComponent<IKHandCtrl>();
@@ -138,6 +138,9 @@ namespace GameCtrl
 			}
 
 		}
+
 	}
+
+
 }
 

@@ -25,4 +25,18 @@ namespace GameCtrl
 		RightHander = 1,
 		LeftHander = 2,
 	}
+
+	public enum InputCmd
+	{
+		None = 0,
+		Forword,			
+		Rightword,			
+		LightAttack,	
+		HeavyAttack,
+		SepcialAttack,
+		EquipWeapon,	
+		Relax,
+		SwitchRun,		
+
+	}
 }
