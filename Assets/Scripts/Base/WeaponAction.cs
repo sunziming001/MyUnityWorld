@@ -111,9 +111,11 @@ namespace GameCtrl
 					Transform attachPoint = weaponObj.transform.Find("AttachPoint");
 					if(attachPoint != null)
 					{
+						//x:手臂 y:手心 z:虎口
 						weaponObj.transform.parent = handTransform;
-						weaponObj.transform.localPosition = handTransform.localPosition - attachPoint.position;
-						weaponObj.transform.Rotate(handTransform.localRotation.eulerAngles+new Vector3(90,-90,0));
+						weaponObj.transform.localPosition = attachPoint.position;
+						weaponObj.transform.localRotation = Quaternion.identity;
+						
 						weaponObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
 						IKHandCtrl ikCtrl = GetComponent<IKHandCtrl>();
