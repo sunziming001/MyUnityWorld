@@ -1,16 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TestLogic : MonoBehaviour
 {
-	private GameObject character;
+	private GameObject character = null;
 	private Camera mainCamera = null;
+	private GameObject enemyCharacter = null;
+
     // Start is called before the first frame update
     void Awake()
     {
-
 		initUserCtrlCharacter();
+		initEnemyCharacter();
+	}
+
+	private void initEnemyCharacter()
+	{
+		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
+		if(characterRes)
+		{
+			enemyCharacter = Instantiate(characterRes);
+			if(enemyCharacter)
+			{
+				enemyCharacter.AddComponent<NavMeshAgent>();
+				enemyCharacter.AddComponent<MoveTo>();
+				enemyCharacter.transform.localPosition = new Vector3(0, 0, 20);
+				enemyCharacter.transform.localScale = new Vector3(5, 5, 5);
+			}
+
+		}
 	}
 
 	private void initUserCtrlCharacter()
@@ -47,5 +67,11 @@ public class TestLogic : MonoBehaviour
 			}
 
 		}
+	}
+
+	void Update()
+	{
+		MoveTo moveTo = enemyCharacter.AddComponent<MoveTo>();
+		moveTo.goal = character.transform;
 	}
 }
