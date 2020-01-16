@@ -10,6 +10,7 @@ public class MoveTo : MonoBehaviour
 	void Start()
 	{
 		NavMeshAgent agent = GetComponent<NavMeshAgent>();
-		agent.destination = goal.position;
+		if(goal != null)
+			agent.destination = goal.position;
 	}
 }
