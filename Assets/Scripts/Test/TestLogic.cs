@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class TestLogic : MonoBehaviour
 {
@@ -14,20 +15,25 @@ public class TestLogic : MonoBehaviour
     {
 		initUserCtrlCharacter();
 		initEnemyCharacter();
+		SceneManager.LoadScene("Demo2Scene",LoadSceneMode.Additive);
 	}
 
 	private void initEnemyCharacter()
 	{
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
-		if(characterRes)
+		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
+		Vector3 position = new Vector3(0, 0, 20);
+		Vector3 scale = new Vector3(5, 5, 5);
+		
+		if (characterRes)
 		{
 			enemyCharacter = Instantiate(characterRes);
 			if(enemyCharacter)
 			{
 				enemyCharacter.AddComponent<NavMeshAgent>();
 				enemyCharacter.AddComponent<MoveTo>();
-				enemyCharacter.transform.localPosition = new Vector3(0, 0, 20);
-				enemyCharacter.transform.localScale = new Vector3(5, 5, 5);
+				enemyCharacter.transform.position = position;
+				enemyCharacter.transform.localScale = scale;
 			}
 
 		}
@@ -54,7 +60,7 @@ public class TestLogic : MonoBehaviour
 			mainCamera.transform.localPosition = character.transform.localPosition + new Vector3(0, 6, -5);
 			mainCamera.transform.Rotate(new Vector3(30, 0, 0), Space.Self);
 
-			character.transform.localPosition = new Vector3(0, 0, 0);
+			character.transform.position = new Vector3(0, 0, 0);
 			character.transform.localScale = new Vector3(5, 5, 5);
 
 			character.AddComponent<CharacterInputCtrl>();
