@@ -37,6 +37,13 @@ namespace GameCtrl
 		EquipWeapon,	
 		Relax,
 		SwitchRun,		
+	}
+
+	public enum NPCType
+	{
+		Neutral,
+		Enemy,
+		Friend,
 
 	}
 }

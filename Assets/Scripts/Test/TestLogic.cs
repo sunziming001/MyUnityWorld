@@ -17,6 +17,8 @@ public class TestLogic : MonoBehaviour
 
 		initUserCtrlCharacter();
 		initEnemyCharacter();
+
+
 		
 	}
 
@@ -26,20 +28,19 @@ public class TestLogic : MonoBehaviour
 		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
 		Vector3 position = new Vector3(0, 0, 40);
 		Vector3 scale = new Vector3(5, 5, 5);
-		//float navMeshAgentRadius = 2.5f;
-		//float navMeshAgentSpeed = 5.0f;
+		float navMeshAgentRadius = 7.0f;
 		if (characterRes)
 		{
 			enemyCharacter = Instantiate(characterRes);
 			if(enemyCharacter)
 			{
-				enemyCharacter.AddComponent<MoveTo>();
+				enemyCharacter.AddComponent<GameCtrl.NPCCharacterCtrl>();
 				enemyCharacter.transform.position = position;
 				enemyCharacter.transform.localScale = scale;
 
 				Animator animator = enemyCharacter.GetComponent<Animator>();
 				NavMeshAgent navMeshAgent = enemyCharacter.GetComponent<NavMeshAgent>();
-
+				GameCtrl.NPCCharacterCtrl npcCharacterCtrl = enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>();
 				if (animator)
 				{
 					animator.runtimeAnimatorController = animatorController;
@@ -48,7 +49,15 @@ public class TestLogic : MonoBehaviour
 
 				if(navMeshAgent)
 				{
+					navMeshAgent.radius = navMeshAgentRadius;
+					navMeshAgent.speed = 20.0f;
+				}
 
+				if(npcCharacterCtrl)
+				{
+					npcCharacterCtrl.patrolPoints.Enqueue(new Vector3(0, 0, 0));
+					npcCharacterCtrl.patrolPoints.Enqueue(new Vector3(20, 0, 0));
+					npcCharacterCtrl.patrolPoints.Enqueue(new Vector3(0, 0, 20));
 				}
 			}
 
@@ -94,7 +103,6 @@ public class TestLogic : MonoBehaviour
 
 	void Update()
 	{
-		MoveTo moveTo = enemyCharacter.AddComponent<MoveTo>();
-		moveTo.goal = character.transform;
+		
 	}
 }
