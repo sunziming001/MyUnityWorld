@@ -3,73 +3,90 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameCtrl
-{ 
-    public class AbsInputCtrl : MonoBehaviour
-    {
-        protected delegate void ParamCollector(InputInfo inputInfo, in ActionParam param);
+{
+	public class AbsInputCtrl : MonoBehaviour
+	{
+		protected delegate void ParamCollector(InputInfo inputInfo, in ActionParam param);
 
-        protected List<KeyValuePair<AbsAction, ParamCollector>> action2InputJudge = new List<KeyValuePair<AbsAction, ParamCollector>>();
+		protected List<KeyValuePair<AbsAction, ParamCollector>> action2InputJudge = new List<KeyValuePair<AbsAction, ParamCollector>>();
 
 
 
-        public virtual void Awake()
-        {
-            InitialAction2InputJudge();
-        }
+		public virtual void Awake()
+		{
+			InitialAction2InputJudge();
+		}
 
-        protected virtual void InitialAction2InputJudge()
-        {
- 
-        }
+		protected virtual void InitialAction2InputJudge()
+		{
 
-        protected void appendAction2InputJudge(AbsAction action, ParamCollector judge)
-        {
-            KeyValuePair<AbsAction, ParamCollector> pair = new KeyValuePair<AbsAction, ParamCollector>(action, judge);
-            action2InputJudge.Add(pair);
-            
-        }
+		}
 
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+		protected void appendAction2InputJudge(AbsAction action, ParamCollector judge)
+		{
+			KeyValuePair<AbsAction, ParamCollector> pair = new KeyValuePair<AbsAction, ParamCollector>(action, judge);
+			action2InputJudge.Add(pair);
 
-        // Update is called once per frame
-        public virtual void Update()
-        {
-            executeActions();
-        }
+		}
 
-        void FixedUpdate()
-        {
-            triggerActions();
-        }
+		// Start is called before the first frame update
+		void Start()
+		{
 
-        private void triggerActions()
-        {
+		}
+
+		// Update is called once per frame
+		public virtual void Update()
+		{
+			executeUpdate();
+		}
+
+		void FixedUpdate()
+		{
+			triggerActions();
+		}
+
+		public virtual void OnAnimatorMove()
+		{
+			executeAnimatorMove();
+		}
+
+
+		private void triggerActions()
+		{
 			InputInfo info = InputManager.collectInputCmds();
-            action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
-            {
-                ParamCollector inputJudge = pair.Value;
-                AbsAction action = pair.Key;
-                ActionParam param =  action.GetActionParam();
-                inputJudge(info, param);
-                action.trigger(param);
-               
-            });
-        }
+			action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
+			{
+				ParamCollector inputJudge = pair.Value;
+				AbsAction action = pair.Key;
+				ActionParam param = action.GetActionParam();
+				inputJudge(info, param);
+				action.trigger(param);
 
-        protected void executeActions()
-        {
-            action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
-            {
-          
-                AbsAction action = pair.Key;
-                action.execute();
+			});
+		}
 
-            });
-        }
+		protected void executeUpdate()
+		{
+			action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
+			{
+
+				AbsAction action = pair.Key;
+				action.executeUpdate();
+
+			});
+		}
+
+		protected void executeAnimatorMove()
+		{
+			action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
+			{
+
+				AbsAction action = pair.Key;
+				action.executeAnimatorMove();
+
+			});
+		}
     }
 
 }

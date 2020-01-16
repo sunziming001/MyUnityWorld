@@ -19,7 +19,7 @@ namespace GameCtrl
 		private string curLeftWeaponRes = null;
 		private GameObject rightWeapon = null;
 		private string curRightWeaponRes = null;
-		private bool isDuringEquip = false;
+		//private bool isDuringEquip = false;
 
 		public struct WeaponInfo
 		{
@@ -43,9 +43,9 @@ namespace GameCtrl
 		}
 
 
-		protected override void OnActionExecute()
+		protected override void OnActionExecuteUpdate()
 		{
-			base.OnActionExecute();
+			base.OnActionExecuteUpdate();
 
 			ActionParam param = GetActionParam();
 			IKHandCtrl ikHandCtrl = GetComponent<IKHandCtrl>();

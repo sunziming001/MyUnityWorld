@@ -91,9 +91,9 @@ namespace GameCtrl
 			angle = param.GetParam<float>(MoveAction.KeyRoateAroundAngle);
 		}
 
-		protected override void OnActionExecute() 
+		protected override void OnActionExecuteAnimatorMove() 
         {
-            base.OnActionExecute();
+            base.OnActionExecuteAnimatorMove();
 
 			ActionParam param = GetActionParam();
 

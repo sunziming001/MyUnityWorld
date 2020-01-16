@@ -70,9 +70,9 @@ namespace GameCtrl
 			return !isDuringAttack;
 		}
 
-		protected override void OnActionExecute()
+		protected override void OnActionExecuteUpdate()
 		{
-			base.OnActionExecute();
+			base.OnActionExecuteUpdate();
 
 			ActionParam param = GetActionParam();
 			isMoving = GetIsMoving(param);

@@ -88,7 +88,7 @@ namespace GameCtrl
 			msSinceTrigged = 0;
 		}
 
-		virtual protected void OnActionExecute()
+		virtual protected void OnActionExecuteUpdate()
 		{
 			msSinceTrigged += Time.deltaTime;
 			
@@ -101,13 +101,26 @@ namespace GameCtrl
 		}
 
 
-		public void execute()
+		public void executeUpdate()
 		{
 			if (isTriggered)
 			{
-				OnActionExecute();
+				OnActionExecuteUpdate();
 			}
-			
+		}
+
+
+		public void executeAnimatorMove()
+		{
+			if(isTriggered)
+			{
+				OnActionExecuteAnimatorMove();
+			}
+		}
+
+		virtual protected void OnActionExecuteAnimatorMove()
+		{
+
 		}
 
 		public void trigger(ActionParam param)
