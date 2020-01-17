@@ -55,19 +55,35 @@ namespace GameCtrl
 		
 		void OnAttackFinished()
 		{
-			isDuringAttack = false;
+
+			StartCoroutine(OnAttackFinishedEx());
 			Animator anim = GetComponent<Animator>();
+			
+		}
+
+
+		IEnumerator OnAttackFinishedEx()
+		{
+			Animator anim = GetComponent<Animator>();
+			yield return new WaitForSeconds(0.0f);
 			anim.SetTrigger("AttackFinished");
+			anim.ResetTrigger("StartAttack");
+			isDuringAttack = false;
 		}
 
 		void Hit()
 		{
-			
+
 		}
 
-		public bool isMoveable()
+		public bool IsMoveable()
 		{
 			return !isDuringAttack;
+		}
+
+		public bool IsDuringAttack()
+		{
+			return isDuringAttack;
 		}
 
 		protected override void OnActionExecuteUpdate()
@@ -83,16 +99,17 @@ namespace GameCtrl
 			anim.SetBool("isMoving", isMoving);
 			anim.SetInteger("WeaponType", (int)weaponType);
 
-			if(isStartAttack && weaponType != WeaponType.Relax)
+			if(isStartAttack 
+				&& weaponType != WeaponType.Relax
+				&& !isDuringAttack)
 			{
 				isDuringAttack = true;
+				
 				anim.SetTrigger("StartAttack");
 				anim.ResetTrigger("AttackFinished");
 			}
-			else
-			{
-				anim.ResetTrigger("StartAttack");
-			}
+
 		}
+
 	}
 }

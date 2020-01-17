@@ -154,5 +154,10 @@ public class TestLogic : MonoBehaviour
 		{
 			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = null;
 		}
+
+		if(Input.GetKey(KeyCode.Z))
+		{
+			character.transform.Translate(new Vector3(0, 0, -5), Space.World);
+		}
 	}
 }

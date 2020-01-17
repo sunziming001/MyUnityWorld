@@ -59,8 +59,8 @@ namespace GameCtrl
 			
 			if(curTargetPosition != null)
 			{
+				navAgent.SetDestination(curTargetPosition.Value);
 				navAgent.isStopped = false;
-				navAgent.destination = curTargetPosition.Value;		
 			}
 			else
 			{
@@ -74,24 +74,33 @@ namespace GameCtrl
 		{
 			base.OnActionExecuteAnimatorMove();
 
-			if(!IsNaviDestinationReached()
-				&&  !navAgent.isStopped)
+
+			if (IsDuringNavi())
 			{
 				transform.position = navAgent.nextPosition;
 			}
+			else {
+				navAgent.nextPosition = transform.position;
+			}
 			
+		
 
 		}
 
 		public bool IsDuringNavi()
 		{
-			return !navAgent.isStopped && !IsNaviDestinationReached();
+			return curTargetPosition !=null
+				&& !IsNaviDestinationReached();
 		}
 
 		public bool IsNaviDestinationReached()
 		{
-			return navAgent.remainingDistance < navAgent.radius;
+			if (curTargetPosition != null)
+				return Vector3.Distance(curTargetPosition.Value, transform.position) < navAgent.radius;
+			else
+				return true;
 		}
+		
 	}
 }
 

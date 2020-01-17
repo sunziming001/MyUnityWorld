@@ -138,7 +138,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	private bool isMoveable()
 	{
 		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
-		return animatorAction.isMoveable();
+		return animatorAction.IsMoveable();
 	}
 
 	private float GetSpeed()

@@ -26,7 +26,7 @@ namespace GameCtrl
 		private Animator anim = null;
 		private NavMeshAgent agent = null;
 		private NaviAction naviAction = null;
-
+		private AnimatorAction animatorAction = null;
 
 		public GameObject attackTarget = null;
 		public WeaponType canEquipWeapn = WeaponType.Relax;
@@ -35,17 +35,6 @@ namespace GameCtrl
 		public HanderType handerType;
 
 		public Queue<Vector3> patrolPoints =new Queue<Vector3>();
-
-
-		void Start()
-		{
-			anim = GetComponent<Animator>();
-			agent = GetComponent<NavMeshAgent>();
-			naviAction = GetComponent<NaviAction>();
-
-			agent.updatePosition = false;
-			attackTarget = null;
-		}
 
 		void FootR()
 		{
@@ -56,6 +45,18 @@ namespace GameCtrl
 		{
 
 		}
+
+		void Start()
+		{
+			anim = GetComponent<Animator>();
+			agent = GetComponent<NavMeshAgent>();
+			naviAction = GetComponent<NaviAction>();
+			animatorAction = GetComponent<AnimatorAction>();
+
+			agent.updatePosition = false;
+			attackTarget = null;
+		}
+
 
 
 		protected override InputInfo OnCollectInputInfo()
@@ -114,7 +115,7 @@ namespace GameCtrl
 			var aicmd2Arg = inputInfo.aicmd2Arg;
 			object tmp = null;
 
-			if (naviAction.IsDuringNavi())
+			if (naviAction.IsDuringNavi() )
 			{
 				AnimatorAction.SetIsMoving(param, true);
 			}
@@ -132,6 +133,16 @@ namespace GameCtrl
 			{
 				AnimatorAction.SetWeaponType(param, WeaponType.Relax);
 			}
+
+			if(aicmd2Arg.TryGetValue(AICmd.Attack,out tmp))
+			{
+				AnimatorAction.SetStartAttack(param, true);
+			}
+			else
+			{
+				AnimatorAction.SetStartAttack(param, false);
+			}
+			
 		}
 
 		void NaviInput(InputInfo inputInfo, in ActionParam param)
@@ -169,6 +180,17 @@ namespace GameCtrl
 			ret = new Dictionary<AICmd, object>();
 			ret.Add(AICmd.GoToPoint, attackTarget.transform.position);
 			ret.Add(AICmd.LockTarget, attackTarget);
+			
+			if(!naviAction.IsDuringNavi()
+				&& !animatorAction.IsDuringAttack())
+			{
+				ret.Add(AICmd.Attack, null);
+
+			}
+			else
+			{
+
+			}
 			
 		}
 
