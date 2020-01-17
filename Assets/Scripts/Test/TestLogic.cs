@@ -35,6 +35,10 @@ public class TestLogic : MonoBehaviour
 		patrolPoints.Enqueue(new Vector3(20, 0, 0));
 		patrolPoints.Enqueue(new Vector3(0, 0, 20));
 
+		GameCtrl.WeaponType canEquipWeapon = GameCtrl.WeaponType.TwoHandSword;
+		string rightWeaponRes = "Weapon/2HandSword/2Hand-Sword";
+		string leftWeaponRes = null;
+
 		float navMeshAgentRadius = 7.0f;
 		float navMeshAgentSpeed = 10.0f;
 
@@ -65,6 +69,9 @@ public class TestLogic : MonoBehaviour
 				if(npcCharacterCtrl)
 				{
 					npcCharacterCtrl.patrolPoints = patrolPoints;
+					npcCharacterCtrl.canEquipWeapn = canEquipWeapon;
+					npcCharacterCtrl.rightWeaponRes = rightWeaponRes;
+					npcCharacterCtrl.leftWeaponRes = leftWeaponRes;
 				}
 			}
 
@@ -112,7 +119,7 @@ public class TestLogic : MonoBehaviour
 	{
 		if(Vector3.Distance(character.transform.position, enemyCharacter.transform.position)<=20.0f)
 		{
-			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = character.transform;
+			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = character;
 		}
 		else
 		{

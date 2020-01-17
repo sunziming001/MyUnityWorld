@@ -27,7 +27,12 @@ namespace GameCtrl
 		private NavMeshAgent agent = null;
 		private NaviAction naviAction = null;
 
-		public Transform attackTarget = null;
+
+		public GameObject attackTarget = null;
+		public WeaponType canEquipWeapn = WeaponType.Relax;
+		public string rightWeaponRes;
+		public string leftWeaponRes;
+		public HanderType handerType;
 
 		public Queue<Vector3> patrolPoints =new Queue<Vector3>();
 
@@ -65,12 +70,49 @@ namespace GameCtrl
 			base.InitialAction2InputJudge();
 			appendAction2InputJudge(GetComponent<NaviAction>(), NaviInput);
 			appendAction2InputJudge(GetComponent<AnimatorAction>(), AnimatorInput);
+			appendAction2InputJudge(GetComponent<WeaponAction>(), WeaponInput);
+		}
+
+		void WeaponInput(InputInfo inputInfo, in ActionParam param)
+		{
+			var aicmd2Arg = inputInfo.aicmd2Arg;
+			object tmp = null;
+			WeaponAction.SetActionParamValid(param, true);
+			WeaponAction.WeaponInfo info;
+
+			if (aicmd2Arg.TryGetValue(AICmd.LockTarget, out tmp))
+			{
+				info.handerType = handerType;
+				info.leftHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.LeftHand);
+				info.leftWeaponRes = leftWeaponRes;
+
+				info.rightWeaponRes = rightWeaponRes;
+				info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
+
+				WeaponAction.SetWeaponInfo(param, info);
+			}
+			else
+			{
+				info.handerType = handerType;
+				info.leftHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.LeftHand);
+				info.leftWeaponRes = null;
+
+				info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
+				info.rightWeaponRes = null;
+
+				info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
+
+				WeaponAction.SetWeaponInfo(param, info);
+
+			}
+			
 		}
 
 		void AnimatorInput(InputInfo inputInfo, in ActionParam param)
 		{
 			AnimatorAction.SetActionParamValid(param, true);
-			
+			var aicmd2Arg = inputInfo.aicmd2Arg;
+			object tmp = null;
 
 			if (naviAction.IsDuringNavi())
 			{
@@ -80,7 +122,16 @@ namespace GameCtrl
 			{
 				AnimatorAction.SetIsMoving(param, false);
 			}
+
 			
+			if (aicmd2Arg.TryGetValue(AICmd.LockTarget, out tmp))
+			{
+				AnimatorAction.SetWeaponType(param, WeaponType.TwoHandSword);
+			}
+			else
+			{
+				AnimatorAction.SetWeaponType(param, WeaponType.Relax);
+			}
 		}
 
 		void NaviInput(InputInfo inputInfo, in ActionParam param)
@@ -116,8 +167,8 @@ namespace GameCtrl
 		private void OnCollectBattleAICmd(out Dictionary<AICmd, object> ret)
 		{
 			ret = new Dictionary<AICmd, object>();
-			ret.Add(AICmd.GoToPoint, attackTarget.position);
-
+			ret.Add(AICmd.GoToPoint, attackTarget.transform.position);
+			ret.Add(AICmd.LockTarget, attackTarget);
 			
 		}
 
