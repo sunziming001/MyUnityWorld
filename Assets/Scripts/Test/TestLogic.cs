@@ -157,7 +157,7 @@ public class TestLogic : MonoBehaviour
 
 		if(Input.GetKey(KeyCode.Z))
 		{
-			character.transform.Translate(new Vector3(0, 0, -5), Space.World);
+			character.transform.Translate(new Vector3(0, 0, -2), Space.World);
 		}
 	}
 }
