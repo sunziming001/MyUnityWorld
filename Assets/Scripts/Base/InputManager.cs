@@ -6,16 +6,17 @@ using UnityEngine;
 
 namespace GameCtrl
 {
-	public struct InputInfo
+	public class InputInfo
 	{
-		public Dictionary<InputCmd, object> cmd2Arg;
+		public Dictionary<InputCmd, object> inputCmd2Arg = null;
+		public Dictionary<AICmd, object> aicmd2Arg =null ;
 	}
 
 	public class InputManager
 	{
-		public static InputInfo collectInputCmds()
+		public static Dictionary<InputCmd, object> collectInputCmds()
 		{
-			InputInfo info;
+			
 			Dictionary<InputCmd, object> ret =new Dictionary<InputCmd, object>();
 
 			if (Input.GetKey(KeyCode.W))
@@ -55,8 +56,8 @@ namespace GameCtrl
 				ret.Add(InputCmd.SwitchRun, null);
 			}
 
-			info.cmd2Arg = ret;
-			return info;
+			
+			return ret;
 		}
 	}
 

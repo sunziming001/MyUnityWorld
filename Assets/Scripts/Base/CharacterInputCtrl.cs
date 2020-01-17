@@ -33,7 +33,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		{
 			return;
 		}
-		var cmd2Arg = inputInfo.cmd2Arg;
+		var cmd2Arg = inputInfo.inputCmd2Arg;
 		object tmpValue;
 		if (cmd2Arg.TryGetValue(InputCmd.Forword, out tmpValue))
 		{
@@ -57,7 +57,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		AnimatorAction.SetActionParamValid(param, true);
 
 		bool isMoving = false;
-		var cmd2Arg = inputInfo.cmd2Arg;
+		var cmd2Arg = inputInfo.inputCmd2Arg;
 		object tmpValue;
 
 		if (isMoveable()
@@ -94,7 +94,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	{
 		WeaponAction.SetActionParamValid(param, true);
 		WeaponAction.WeaponInfo info;
-		var cmd2Arg = inputInfo.cmd2Arg;
+		var cmd2Arg = inputInfo.inputCmd2Arg;
 		object tmp = null;
 
 		if (cmd2Arg.TryGetValue(InputCmd.Relax, out tmp ))

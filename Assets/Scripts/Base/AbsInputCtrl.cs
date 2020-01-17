@@ -54,7 +54,7 @@ namespace GameCtrl
 
 		private void triggerActions()
 		{
-			InputInfo info = InputManager.collectInputCmds();
+			InputInfo info = OnCollectInputInfo();
 			action2InputJudge.ForEach(delegate (KeyValuePair<AbsAction, ParamCollector> pair)
 			{
 				ParamCollector inputJudge = pair.Value;
@@ -64,6 +64,13 @@ namespace GameCtrl
 				action.trigger(param);
 
 			});
+		}
+
+		protected virtual InputInfo OnCollectInputInfo()
+		{
+			InputInfo info = new InputInfo();
+			info.inputCmd2Arg = InputManager.collectInputCmds();
+			return info;
 		}
 
 		protected void executeUpdate()

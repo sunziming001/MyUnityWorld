@@ -27,7 +27,14 @@ public class TestLogic : MonoBehaviour
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
 		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
 		Vector3 position = new Vector3(0, 0, 40);
+
 		Vector3 scale = new Vector3(5, 5, 5);
+
+		Queue<Vector3> patrolPoints = new Queue<Vector3>();
+		patrolPoints.Enqueue(new Vector3(0, 0, 0));
+		patrolPoints.Enqueue(new Vector3(20, 0, 0));
+		patrolPoints.Enqueue(new Vector3(0, 0, 20));
+
 		float navMeshAgentRadius = 7.0f;
 		if (characterRes)
 		{
@@ -55,9 +62,7 @@ public class TestLogic : MonoBehaviour
 
 				if(npcCharacterCtrl)
 				{
-					npcCharacterCtrl.patrolPoints.Enqueue(new Vector3(0, 0, 0));
-					npcCharacterCtrl.patrolPoints.Enqueue(new Vector3(20, 0, 0));
-					npcCharacterCtrl.patrolPoints.Enqueue(new Vector3(0, 0, 20));
+					npcCharacterCtrl.patrolPoints = patrolPoints;
 				}
 			}
 

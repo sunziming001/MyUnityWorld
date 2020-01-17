@@ -39,11 +39,19 @@ namespace GameCtrl
 		SwitchRun,		
 	}
 
+	public enum AICmd
+	{
+		None = 0,
+		GoToPoint,
+		LockTarget,
+		Attack,
+		Talk,
+	}
+
 	public enum NPCType
 	{
 		Neutral,
 		Enemy,
 		Friend,
-
 	}
 }

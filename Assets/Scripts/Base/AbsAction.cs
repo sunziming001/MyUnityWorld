@@ -21,7 +21,13 @@ namespace GameCtrl
 			data.Add(key, val);
 		}
 
-		
+		public bool HasValue(string key)
+		{
+			object obj;
+			bool hasValue = data.TryGetValue(key, out obj);
+			return hasValue;
+		}
+
 		public T GetParam<T>(string key)
 		{
 			T ret = default(T);
