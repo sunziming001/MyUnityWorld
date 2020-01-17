@@ -27,6 +27,7 @@ namespace GameCtrl
 		private NavMeshAgent agent = null;
 		private NaviAction naviAction = null;
 
+		public Transform attackTarget = null;
 
 		public Queue<Vector3> patrolPoints =new Queue<Vector3>();
 
@@ -38,6 +39,7 @@ namespace GameCtrl
 			naviAction = GetComponent<NaviAction>();
 
 			agent.updatePosition = false;
+			attackTarget = null;
 		}
 
 		void FootR()
@@ -49,6 +51,7 @@ namespace GameCtrl
 		{
 
 		}
+
 
 		protected override InputInfo OnCollectInputInfo()
 		{
@@ -73,6 +76,10 @@ namespace GameCtrl
 			{
 				AnimatorAction.SetIsMoving(param, true);
 			}
+			else
+			{
+				AnimatorAction.SetIsMoving(param, false);
+			}
 			
 		}
 
@@ -92,25 +99,42 @@ namespace GameCtrl
 
 		private Dictionary<AICmd,object> CollectAICmd()
 		{
-			Dictionary<AICmd, object> ret =new Dictionary<AICmd, object>();
-			NaviAction naviAction = GetComponent<NaviAction>();
-			if (!naviAction.IsDuringNavi())
+			Dictionary<AICmd, object> ret = null;
+			if(attackTarget == null)
 			{
-				
-				Nullable<Vector3> curNaviDestination = DequeueNextNaviDestination();
-				if(curNaviDestination != null)
-				{
-					ret.Add(AICmd.GoToPoint, curNaviDestination.Value);
-				}
-				
+				OnCollectNaviAICmd(out ret);
 			}
-
-			
+			else
+			{
+				OnCollectBattleAICmd(out ret);
+			}
+				
 
 			return ret;
 		}
 
-		
+		private void OnCollectBattleAICmd(out Dictionary<AICmd, object> ret)
+		{
+			ret = new Dictionary<AICmd, object>();
+			ret.Add(AICmd.GoToPoint, attackTarget.position);
+
+			
+		}
+
+		private void OnCollectNaviAICmd(out Dictionary<AICmd, object> ret)
+		{
+			ret = new Dictionary<AICmd, object>();
+			if (!naviAction.IsDuringNavi())
+			{
+
+				Nullable<Vector3> curNaviDestination = DequeueNextNaviDestination();
+				if (curNaviDestination != null)
+				{
+					ret.Add(AICmd.GoToPoint, curNaviDestination.Value);
+				}
+			}
+
+		}
 
 
 		Nullable<Vector3> DequeueNextNaviDestination()

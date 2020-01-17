@@ -36,6 +36,8 @@ public class TestLogic : MonoBehaviour
 		patrolPoints.Enqueue(new Vector3(0, 0, 20));
 
 		float navMeshAgentRadius = 7.0f;
+		float navMeshAgentSpeed = 10.0f;
+
 		if (characterRes)
 		{
 			enemyCharacter = Instantiate(characterRes);
@@ -57,7 +59,7 @@ public class TestLogic : MonoBehaviour
 				if(navMeshAgent)
 				{
 					navMeshAgent.radius = navMeshAgentRadius;
-					navMeshAgent.speed = 20.0f;
+					navMeshAgent.speed = navMeshAgentSpeed;
 				}
 
 				if(npcCharacterCtrl)
@@ -108,6 +110,13 @@ public class TestLogic : MonoBehaviour
 
 	void Update()
 	{
-		
+		if(Vector3.Distance(character.transform.position, enemyCharacter.transform.position)<=20.0f)
+		{
+			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = character.transform;
+		}
+		else
+		{
+			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = null;
+		}
 	}
 }
