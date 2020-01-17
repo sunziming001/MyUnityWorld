@@ -26,9 +26,9 @@ public class TestLogic : MonoBehaviour
 	{
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
 		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
-		Vector3 position = new Vector3(0, 0, 40);
+		Vector3 position = new Vector3(30, 0, 35);
 
-		Vector3 scale = new Vector3(5, 5, 5);
+		float characterHeight = 1.75f;
 
 		Queue<Vector3> patrolPoints = new Queue<Vector3>();
 		patrolPoints.Enqueue(new Vector3(0, 0, 0));
@@ -39,8 +39,8 @@ public class TestLogic : MonoBehaviour
 		string rightWeaponRes = "Weapon/2HandSword/2Hand-Sword";
 		string leftWeaponRes = null;
 
-		float navMeshAgentRadius = 7.0f;
-		float navMeshAgentSpeed = 10.0f;
+		float navMeshAgentRadius = 1.2f;
+		float navMeshAgentSpeed = 1.6f;
 
 		if (characterRes)
 		{
@@ -49,7 +49,7 @@ public class TestLogic : MonoBehaviour
 			{
 				enemyCharacter.AddComponent<GameCtrl.NPCCharacterCtrl>();
 				enemyCharacter.transform.position = position;
-				enemyCharacter.transform.localScale = scale;
+				ScaleCharacter(enemyCharacter, characterHeight);
 
 				Animator animator = enemyCharacter.GetComponent<Animator>();
 				NavMeshAgent navMeshAgent = enemyCharacter.GetComponent<NavMeshAgent>();
@@ -83,6 +83,9 @@ public class TestLogic : MonoBehaviour
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
 		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
 		mainCamera = gameObject.AddComponent<Camera>();
+		float characterHeight = 1.75f;
+		float walkSpeed = 1.27f;
+		float runSpeed = 2.70f;
 
 		if (mainCamera != null)
 		{
@@ -99,25 +102,51 @@ public class TestLogic : MonoBehaviour
 			mainCamera.transform.localPosition = character.transform.localPosition + new Vector3(0, 6, -5);
 			mainCamera.transform.Rotate(new Vector3(30, 0, 0), Space.Self);
 
-			character.transform.position = new Vector3(0, 0, 0);
+			character.transform.position = new Vector3(25, 0, 25);
+			ScaleCharacter(character, characterHeight);
+
 			//character.transform.Rotate(new Vector3(0, 180, 0), Space.Self);
-			character.transform.localScale = new Vector3(5, 5, 5);
+			//character.transform.localScale = new Vector3(5, 5, 5);
 
-			character.AddComponent<CharacterInputCtrl>();
+			CharacterInputCtrl characterInputCtrl = character.AddComponent<CharacterInputCtrl>();
 			Animator animator = character.GetComponent<Animator>();
-
+			
 			if (animator)
 			{
 				animator.runtimeAnimatorController = animatorController;
 
 			}
 
+			if(characterInputCtrl)
+			{
+				characterInputCtrl.walkSpeed = walkSpeed;
+				characterInputCtrl.runSpeed = runSpeed;
+			}
+
 		}
+	}
+
+	private void ScaleCharacter(in GameObject obj, float height)
+	{
+		Renderer render = obj.GetComponent<Renderer>();
+		if(render == null)
+		{
+			render = obj.GetComponentInChildren<Renderer>();
+		}
+
+		if(render)
+		{
+			Vector3 trueSize = render.bounds.size;
+			float factor = height / trueSize.y;
+			obj.transform.localScale= new Vector3(factor, factor, factor);
+		}
+		
+
 	}
 
 	void Update()
 	{
-		if(Vector3.Distance(character.transform.position, enemyCharacter.transform.position)<=20.0f)
+		if(Vector3.Distance(character.transform.position, enemyCharacter.transform.position)<=5.0f)
 		{
 			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = character;
 		}

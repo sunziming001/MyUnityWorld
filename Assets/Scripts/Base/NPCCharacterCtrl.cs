@@ -86,8 +86,8 @@ namespace GameCtrl
 				info.leftHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.LeftHand);
 				info.leftWeaponRes = leftWeaponRes;
 
-				info.rightWeaponRes = rightWeaponRes;
 				info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
+				info.rightWeaponRes = rightWeaponRes;
 
 				WeaponAction.SetWeaponInfo(param, info);
 			}

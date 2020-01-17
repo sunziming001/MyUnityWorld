@@ -11,10 +11,9 @@ using GameCtrl;
 
 public class CharacterInputCtrl :  AbsInputCtrl
 {
-
-	public float disStep = 0.3f;
 	public float angleStep = 1.0f;
-
+	public float walkSpeed = 1.27f;
+	public float runSpeed = 2.70f;
 	void FootR()
 	{
 
@@ -39,7 +38,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		{
 			MoveAction.SetActionParamValid(param, true);
 			float f = (float)tmpValue;
-			MoveAction.SetSelfTranslate(param, new Vector3(0, 0 , disStep*f));
+			MoveAction.SetSelfTranslate(param, new Vector3(0, 0 , GetSpeed()*f*Time.deltaTime));
 		}
 
 
@@ -140,5 +139,10 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	{
 		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
 		return animatorAction.isMoveable();
+	}
+
+	private float GetSpeed()
+	{
+		return walkSpeed;
 	}
 }
