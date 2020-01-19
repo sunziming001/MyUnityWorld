@@ -14,13 +14,12 @@ public class TestLogic : MonoBehaviour
     void Awake()
     {
 		SceneManager.LoadScene("Demo2Scene", LoadSceneMode.Additive);
-
+		
 		initUserCtrlCharacter();
 		initEnemyCharacter();
-
-
-		
 	}
+
+	
 
 	private void initEnemyCharacter()
 	{
@@ -83,6 +82,7 @@ public class TestLogic : MonoBehaviour
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
 		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
 		mainCamera = gameObject.AddComponent<Camera>();
+		
 		float characterHeight = 1.75f;
 		float walkSpeed = 1.27f;
 		float runSpeed = 2.70f;
@@ -140,13 +140,21 @@ public class TestLogic : MonoBehaviour
 			float factor = height / trueSize.y;
 			obj.transform.localScale= new Vector3(factor, factor, factor);
 		}
-		
-
 	}
 
 	void Update()
 	{
-		if(Vector3.Distance(character.transform.position, enemyCharacter.transform.position)<=5.0f)
+
+		/*bool isSuccess = SceneManager.SetActiveScene(SceneManager.GetSceneByName("Demo2Scene"));
+		if(isSuccess)
+		{
+			SceneManager.MoveGameObjectToScene(character, SceneManager.GetSceneByName("Demo2Scene"));
+			SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("DemoScene"));
+			
+		}*/
+		
+
+		if (Vector3.Distance(character.transform.position, enemyCharacter.transform.position)<=5.0f)
 		{
 			enemyCharacter.GetComponent<GameCtrl.NPCCharacterCtrl>().attackTarget = character;
 		}
