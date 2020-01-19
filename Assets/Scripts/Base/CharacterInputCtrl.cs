@@ -28,7 +28,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	{
 		MoveAction.SetActionParamValid(param, false);
 		MoveAction.ClearActionParam(param);
-		if (isMoveable() == false)
+		if (IsMoveable() == false)
 		{
 			return;
 		}
@@ -59,7 +59,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		var cmd2Arg = inputInfo.inputCmd2Arg;
 		object tmpValue;
 
-		if (isMoveable()
+		if (IsMoveable()
 			&& cmd2Arg.TryGetValue(InputCmd.Forword, out tmpValue))
 		{
 			isMoving = true;
@@ -95,32 +95,36 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		WeaponAction.WeaponInfo info;
 		var cmd2Arg = inputInfo.inputCmd2Arg;
 		object tmp = null;
-
-		if (cmd2Arg.TryGetValue(InputCmd.Relax, out tmp ))
+		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
+		if(animatorAction)
 		{
-			info.handerType = HanderType.None;
-			info.leftHandTransform = null;
-			info.rightHandTransform = null;
-			info.leftWeaponRes = null;
-			info.rightWeaponRes = null;
-			WeaponAction.SetWeaponInfo(param, info);
+			if (animatorAction.GetCurWeaponType() == WeaponType.Relax)
+			{
+				info.handerType = HanderType.None;
+				info.leftHandTransform = null;
+				info.rightHandTransform = null;
+				info.leftWeaponRes = null;
+				info.rightWeaponRes = null;
+				WeaponAction.SetWeaponInfo(param, info);
 
-		}
-		else if (cmd2Arg.TryGetValue(InputCmd.EquipWeapon, out tmp))
-		{
-			info.handerType = HanderType.RightHander;
-			info.leftHandTransform = null;
-			info.leftWeaponRes = null;
+			}
+			else if (animatorAction.GetCurWeaponType() == WeaponType.TwoHandSword)
+			{
+				info.handerType = HanderType.RightHander;
+				info.leftHandTransform = null;
+				info.leftWeaponRes = null;
 
-			info.rightWeaponRes = "Weapon/2HandSword/2Hand-Sword";
-			info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
+				info.rightWeaponRes = "Weapon/2HandSword/2Hand-Sword";
+				info.rightHandTransform = GetComponent<Animator>().GetBoneTransform(HumanBodyBones.RightHand);
 
-			WeaponAction.SetWeaponInfo(param, info);
+				WeaponAction.SetWeaponInfo(param, info);
+			}
+			else
+			{
+				WeaponAction.SetActionParamValid(param, false);
+			}
 		}
-		else
-		{
-			WeaponAction.SetActionParamValid(param, false);
-		}
+		
 
 	}
 
@@ -135,10 +139,16 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		appendAction2InputJudge(moveAction, MoveInput);
 	}
 
-	private bool isMoveable()
+	private bool IsMoveable()
 	{
 		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
 		return animatorAction.IsMoveable();
+	}
+
+	private bool IsDuringAttack()
+	{
+		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
+		return animatorAction.IsDuringAttack();
 	}
 
 	private float GetSpeed()

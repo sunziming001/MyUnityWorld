@@ -181,8 +181,7 @@ namespace GameCtrl
 			ret.Add(AICmd.GoToPoint, attackTarget.transform.position);
 			ret.Add(AICmd.LockTarget, attackTarget);
 			
-			if(!naviAction.IsDuringNavi()
-				&& !animatorAction.IsDuringAttack())
+			if(!naviAction.IsDuringNavi())
 			{
 				ret.Add(AICmd.Attack, null);
 
