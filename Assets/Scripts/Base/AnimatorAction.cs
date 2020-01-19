@@ -56,9 +56,9 @@ namespace GameCtrl
 		void OnAttackFinished()
 		{
 
-			StartCoroutine(OnAttackFinishedEx());
-			Animator anim = GetComponent<Animator>();
-			
+			//StartCoroutine(OnAttackFinishedEx());
+			//Animator anim = GetComponent<Animator>();
+			isDuringAttack = false;
 		}
 
 
@@ -68,7 +68,23 @@ namespace GameCtrl
 			yield return new WaitForSeconds(0.0f);
 			anim.SetTrigger("AttackFinished");
 			anim.ResetTrigger("StartAttack");
-			isDuringAttack = false;
+			
+		}
+
+		void AutoResetTrigger(string triggerName, float resetSeconds = 0.0f)
+		{
+			Animator anim = GetComponent<Animator>();
+			anim.SetTrigger(triggerName);
+
+			StartCoroutine(DelayResetTrigger(triggerName, resetSeconds));
+
+		}
+
+		IEnumerator DelayResetTrigger(string triggerName, float resetSeconds)
+		{
+			Animator anim = GetComponent<Animator>();
+			yield return new WaitForSeconds(resetSeconds);
+			anim.ResetTrigger(triggerName);
 		}
 
 		void Hit()
@@ -93,20 +109,28 @@ namespace GameCtrl
 			ActionParam param = GetActionParam();
 			isMoving = GetIsMoving(param);
 			bool isStartAttack = GetStartAttack(param);
-			weaponType = GetWeaponType(param);
+			WeaponType newWeaponType = GetWeaponType(param);
 
 			Animator anim = GetComponent<Animator>();
 			anim.SetBool("isMoving", isMoving);
-			anim.SetInteger("WeaponType", (int)weaponType);
+
+			if(newWeaponType != weaponType)
+			{
+				anim.SetInteger("WeaponType", (int)newWeaponType);
+				AutoResetTrigger("SwithWeaponTriggered");
+				weaponType = newWeaponType;
+			}
+			
+
+
 
 			if(isStartAttack 
 				&& weaponType != WeaponType.Relax
 				&& !isDuringAttack)
 			{
 				isDuringAttack = true;
-				
-				anim.SetTrigger("StartAttack");
-				anim.ResetTrigger("AttackFinished");
+
+				AutoResetTrigger("StartAttack");
 			}
 
 		}
