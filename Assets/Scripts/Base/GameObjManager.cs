@@ -117,6 +117,14 @@ namespace GameCtrl
 				ret = character.transform;
 			return ret;
 		}
+
+		private void Update()
+		{
+			if(Input.GetKey(KeyCode.B))
+			{
+				character.transform.Translate(new Vector3(0, 0, 20), Space.Self);
+			}
+		}
 	}
 }
 
