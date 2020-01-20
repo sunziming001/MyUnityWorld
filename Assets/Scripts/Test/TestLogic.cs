@@ -24,7 +24,7 @@ public class TestLogic : MonoBehaviour
 	private void initEnemyCharacter()
 	{
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
-		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
+		RuntimeAnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as RuntimeAnimatorController;
 		Vector3 position = new Vector3(30, 0, 35);
 
 		float characterHeight = 1.75f;
@@ -80,7 +80,7 @@ public class TestLogic : MonoBehaviour
 	private void initUserCtrlCharacter()
 	{
 		GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
-		UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
+		RuntimeAnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as RuntimeAnimatorController;
 		mainCamera = gameObject.AddComponent<Camera>();
 		
 		float characterHeight = 1.75f;

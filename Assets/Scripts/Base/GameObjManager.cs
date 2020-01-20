@@ -42,7 +42,7 @@ namespace GameCtrl
 				isInited = true;
 			}
 			GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
-			UnityEditor.Animations.AnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as UnityEditor.Animations.AnimatorController;
+			RuntimeAnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as RuntimeAnimatorController;
 			mainCamera = gameObject.AddComponent<Camera>();
 
 			Vector3 cameraPos = new Vector3(0, 30, 0);

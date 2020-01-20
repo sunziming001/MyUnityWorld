@@ -287,9 +287,11 @@ namespace GameCtrl
 				return;
 			}
 
+			TextAsset  textAsset = Resources.Load<TextAsset>("MapInfo/MapBrief");
+			
 			mapBriefUrl = Application.dataPath+ "/Scenes/MapBrief.xml";
 			mapBriefXml = new XmlDocument();
-			mapBriefXml.Load(mapBriefUrl);
+			mapBriefXml.LoadXml(textAsset.text);
 
 			SceneManager.sceneLoaded += OnSceneLoaded;
 			SceneManager.sceneUnloaded += OnSceneUnloaded;
