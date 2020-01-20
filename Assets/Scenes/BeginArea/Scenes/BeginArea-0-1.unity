@@ -119,8 +119,8 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 670eed7362e933e429327eddaed65e27, type: 2}
---- !u!1 &871658087
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &91096311
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,37 +128,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 871658090}
-  - component: {fileID: 871658089}
-  - component: {fileID: 871658088}
+  - component: {fileID: 91096314}
+  - component: {fileID: 91096313}
+  - component: {fileID: 91096312}
   m_Layer: 0
-  m_Name: Terrain-0-0
+  m_Name: Terrain-0-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!154 &871658088
+--- !u!154 &91096312
 TerrainCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871658087}
+  m_GameObject: {fileID: 91096311}
   m_Material: {fileID: 0}
   m_Enabled: 1
-  m_TerrainData: {fileID: 15600000, guid: aadc50ec6f8cd3740a36a58ed7dd523d, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 112cf7b5d0c90e04a917df647e8eea6b, type: 2}
   m_EnableTreeColliders: 1
---- !u!218 &871658089
+--- !u!218 &91096313
 Terrain:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871658087}
+  m_GameObject: {fileID: 91096311}
   m_Enabled: 1
   serializedVersion: 5
-  m_TerrainData: {fileID: 15600000, guid: aadc50ec6f8cd3740a36a58ed7dd523d, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 112cf7b5d0c90e04a917df647e8eea6b, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -181,15 +181,15 @@ Terrain:
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
   m_AllowAutoConnect: 1
---- !u!4 &871658090
+--- !u!4 &91096314
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871658087}
+  m_GameObject: {fileID: 91096311}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

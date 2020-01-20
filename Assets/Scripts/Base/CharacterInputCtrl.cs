@@ -94,7 +94,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		WeaponAction.SetActionParamValid(param, true);
 		WeaponAction.WeaponInfo info;
 		var cmd2Arg = inputInfo.inputCmd2Arg;
-		object tmp = null;
+	
 		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
 		if(animatorAction)
 		{

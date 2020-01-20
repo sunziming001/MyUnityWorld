@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<MapInfo>
+  <Name>BeginArea</Name>
+
+  
+  <SceneUnit>
+    <XIndx>0</XIndx>
+    <ZIndx>0</ZIndx>
+    <NpcInfo>
+      <ResTypeName>"DefaultCharacter"</ResTypeName>
+      <Count>5</Count>
+      
+      <XRange>
+        <Min>0.25</Min>
+        <Max>0.75</Max>
+      </XRange>
+
+      <YRange>
+        <Min>0.25</Min>
+        <Max>0.75</Max>
+      </YRange>
+
+    </NpcInfo>
+    
+  </SceneUnit>
+
+</MapInfo>
+  

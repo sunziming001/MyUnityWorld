@@ -6,6 +6,8 @@ using UnityEngine;
 namespace GameCtrl
 {
 	[RequireComponent(typeof(GameObjManager))]
+	[RequireComponent(typeof(MapStreamManager))]
+
 	public class GameSystem : MonoBehaviour
 	{
 		private static GameSystem instance;

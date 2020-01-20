@@ -108,6 +108,15 @@ namespace GameCtrl
 				obj.transform.localScale = new Vector3(factor, factor, factor);
 			}
 		}
+
+		public Transform GetPlayerTransfrom()
+		{
+			Transform ret = null;
+
+			if (character)
+				ret = character.transform;
+			return ret;
+		}
 	}
 }
 
