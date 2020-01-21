@@ -56,8 +56,10 @@ namespace GameCtrl
 
 		private HashSet<string> loadingSceneName = new HashSet<string>();
 		private HashSet<string> loadedSceneName = new HashSet<string>();
-		private HashSet<string> curActiveScene = new HashSet<string>();
-
+		private HashSet<string> curActiveScenes = new HashSet<string>();
+		private string sceneNameWhichPlayerIn = null;
+		private int unitXSize = 0;
+		private int unitZSize = 0;
 		private delegate bool SceneUnitSearcher(MapNodeInfo mapNodInfo, in List<SceneUnit> sceneUnits);
 
 
@@ -83,8 +85,11 @@ namespace GameCtrl
 			if(playerTransfrom != null)
 			{
 				SceneUnit sceneUnit = GetSceneUint(playerTransfrom.position);
+				unitZSize = sceneUnit.unitZSize;
+				unitXSize = sceneUnit.unitXSize;
 				if(sceneUnit.sceneName != null)
 				{
+					sceneNameWhichPlayerIn = sceneUnit.sceneName;
 					List<SceneUnit> neighbourScene = GetNeighbourSceneUnit(sceneUnit);
 					LoadSceneUnitAnsyc(sceneUnit, neighbourScene);
 				}
@@ -93,12 +98,18 @@ namespace GameCtrl
 			}
 		}
 
+		public Scene GetSceneWhichPlayerIn()
+		{
+			return SceneManager.GetSceneByName(sceneNameWhichPlayerIn);
+		}
+
+
 
 		private void LoadSceneUnitAnsyc(SceneUnit sceneUnit, List<SceneUnit> neighbourScene)
 		{
 			string sceneName = composeTrueSceneName(sceneUnit);
 			List<string> neighbourSceneNames = new List<string>();
-			curActiveScene.Clear();
+			curActiveScenes.Clear();
 
 			for (int i = 0; i<neighbourScene.Count; i++)
 			{
@@ -112,12 +123,12 @@ namespace GameCtrl
 			if (curSceneName != sceneUnit.sceneName)
 			{
 				LoadSceneAnsycAdditive(sceneName);
-				curActiveScene.Add(sceneName);
+				curActiveScenes.Add(sceneName);
 				for (int i = 0; i < neighbourSceneNames.Count; i++)
 				{
 					string name = neighbourSceneNames[i];
 					LoadSceneAnsycAdditive(name);
-					curActiveScene.Add(name);
+					curActiveScenes.Add(name);
 				}
 			}
 
@@ -325,7 +336,7 @@ namespace GameCtrl
 		{
 			foreach (var item in loadedSceneName)
 			{
-				if (!curActiveScene.Contains(item)
+				if (!curActiveScenes.Contains(item)
 					&& item != RootScene)
 				{
 					SceneManager.UnloadSceneAsync(item);

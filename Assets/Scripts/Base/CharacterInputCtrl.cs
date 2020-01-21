@@ -8,7 +8,7 @@ using GameCtrl;
 [RequireComponent(typeof(AnimatorAction))]
 [RequireComponent(typeof(WeaponAction))]
 [RequireComponent(typeof(Animator))]
-
+[RequireComponent(typeof(Rigidbody))]
 public class CharacterInputCtrl :  AbsInputCtrl
 {
 	public float angleStep = 1.0f;
@@ -47,6 +47,13 @@ public class CharacterInputCtrl :  AbsInputCtrl
 			MoveAction.SetActionParamValid(param, true);
 			float f = (float)tmpValue;
 			MoveAction.SetSelfRotation(param, new Vector3(0, angleStep*f, 0));
+		}
+
+		Vector3  eulerAngles = transform.rotation.eulerAngles;
+		if(eulerAngles.x !=0
+			&& eulerAngles.z != 0)
+		{
+			transform.Rotate(-1 * eulerAngles.x, 0, eulerAngles.z * -1);
 		}
 	}
 

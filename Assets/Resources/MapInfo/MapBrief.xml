@@ -1,12 +1,6 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <MapBrief>
   <UnitXSize>100</UnitXSize>
   <UnitZSize>100</UnitZSize>
-  
-  <MapNode name="BeginArea" XCount="3" ZCount="5" GlobalXIdx="0" GlobalZIdx="0"/>
-
-
-
-  
+  <MapNode name="NewBeValley" XCount="4" ZCount="4" GlobalXIdx="0" GlobalZIdx="0" />
 </MapBrief>

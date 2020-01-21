@@ -49,7 +49,7 @@ namespace GameCtrl
 			Vector3 cameraLocPos = new Vector3(0, 6, -5);
 			Vector3 cameraRotate = new Vector3(30, 0, 0);
 
-			Vector3 characterPos = new Vector3(25, 0, 25);
+			Vector3 characterPos = new Vector3(100, 1.0f, 100);
 
 			float characterHeight = 1.75f;
 			float walkSpeed = 1.27f;
@@ -66,28 +66,35 @@ namespace GameCtrl
 				&& mainCamera)
 			{
 				character = Instantiate(characterRes);
-				mainCamera.transform.parent = character.transform;
-				mainCamera.transform.localPosition = character.transform.localPosition + cameraLocPos;
-				mainCamera.transform.Rotate(cameraRotate, Space.Self);
 
-				character.transform.position = characterPos;
-				ScaleCharacter(character, characterHeight);
+				if(character)
+				{
+					BoxCollider boxCollider = character.AddComponent<BoxCollider>();
+					boxCollider.size = new Vector3(1.0f, 0.1f, 0.1f);
+					mainCamera.transform.parent = character.transform;
+					mainCamera.transform.localPosition = character.transform.localPosition + cameraLocPos;
+					mainCamera.transform.Rotate(cameraRotate, Space.Self);
+
+					character.transform.position = characterPos;
+					ScaleCharacter(character, characterHeight);
 
 				
+					
 
-				CharacterInputCtrl characterInputCtrl = character.AddComponent<CharacterInputCtrl>();
-				Animator animator = character.GetComponent<Animator>();
+					CharacterInputCtrl characterInputCtrl = character.AddComponent<CharacterInputCtrl>();
+					Animator animator = character.GetComponent<Animator>();
 
-				if (animator)
-				{
-					animator.runtimeAnimatorController = animatorController;
+					if (animator)
+					{
+						animator.runtimeAnimatorController = animatorController;
 
-				}
+					}
 
-				if (characterInputCtrl)
-				{
-					characterInputCtrl.walkSpeed = walkSpeed;
-					characterInputCtrl.runSpeed = runSpeed;
+					if (characterInputCtrl)
+					{
+						characterInputCtrl.walkSpeed = walkSpeed;
+						characterInputCtrl.runSpeed = runSpeed;
+					}
 				}
 
 			}
