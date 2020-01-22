@@ -11,9 +11,7 @@ using GameCtrl;
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterInputCtrl :  AbsInputCtrl
 {
-	public float angleStep = 1.0f;
-	public float walkSpeed = 1.27f;
-	public float runSpeed = 2.70f;
+
 	void FootR()
 	{
 

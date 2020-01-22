@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
+using DataBase;
 
 
 namespace MapEditor
@@ -16,9 +17,8 @@ namespace MapEditor
 
 	public class CreateMapWizard : ScriptableWizard
 	{
-		private int xUnitSize = 100;
-		private int zUnitSize = 100;
-		private XmlDocument mapBriefXml;
+		public int xUnitSize = 100;
+		public int zUnitSize = 100;
 
 		public int xUnitCount = 1;
 		public int zUnitCount = 1;
@@ -29,52 +29,40 @@ namespace MapEditor
 
 		public string mapName;
 		public List<TerrainLayer> terrainLayers = new List<TerrainLayer>();
-
+		private MapInfoOperator mapInfoOperator = new MapInfoOperator();
 
 		[MenuItem("MapEditor/Create Map")]
 		static void CreateWizard()
 		{
+
 			ScriptableWizard.DisplayWizard<CreateMapWizard>("Create Map", "Create");
-
-			
-			
-
 		}
 
 		void OnWizardCreate()
 		{
-			TextAsset textAsset = Resources.Load<TextAsset>("MapInfo/MapBrief");
-			mapBriefXml = new XmlDocument();
-			mapBriefXml.LoadXml(textAsset.text);
-
-			string xmlPath = Application.dataPath + "/Resources/MapInfo/MapBrief.xml";
-			xUnitSize = Int32.Parse(mapBriefXml.GetElementsByTagName("UnitXSize").Item(0).InnerText);
-			zUnitSize = Int32.Parse(mapBriefXml.GetElementsByTagName("UnitZSize").Item(0).InnerText);
-
+			mapInfoOperator.Init();
 			for (int i = 0; i < xUnitCount; i++)
 			{
 				for (int j = 0; j < zUnitCount; j++)
 				{
-					createSceneAndSave(mapName, i, j);
+					//createSceneAndSave(mapName, i, j);
 				}
 
 			}
-			
 
-			
-			//save node to xml file
 			int globalXIdx = terrainPosX/ xUnitSize;
 			int globalZIdx = terrainPosZ/ zUnitSize;
 
-			XmlElement elem = mapBriefXml.CreateElement("MapNode");
-			elem.SetAttribute("name", mapName);
-			elem.SetAttribute("XCount", xUnitCount.ToString());
-			elem.SetAttribute("ZCount", zUnitCount.ToString());
-			elem.SetAttribute("GlobalXIdx", globalXIdx.ToString());
-			elem.SetAttribute("GlobalZIdx", globalZIdx.ToString());
+			MapInfo mapInfo = new MapInfo();
+			mapInfo.mapName = mapName;
+			mapInfo.xCount = xUnitCount;
+			mapInfo.zCount = zUnitCount;
+			mapInfo.globalXIdx = globalXIdx;
+			mapInfo.globalZIdx = globalZIdx;
+			mapInfo.unitXSize = xUnitSize;
+			mapInfo.unitZSize = zUnitSize;
 
-			mapBriefXml.DocumentElement.AppendChild(elem);
-			mapBriefXml.Save(xmlPath);
+			mapInfoOperator.InsertMap(mapInfo);
 
 		}
 

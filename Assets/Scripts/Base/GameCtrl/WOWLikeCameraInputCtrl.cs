@@ -7,7 +7,6 @@ public class WOWLikeCameraInputCtrl : AbsInputCtrl
 {
 
 	public float disStep = 1.0f;
-	public float angleStep = 1.0f;
 
 
 	// Start is called before the first frame update

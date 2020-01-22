@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Xml;
+using DataBase;
 
 namespace GameCtrl
 {
@@ -50,17 +50,13 @@ namespace GameCtrl
 
 		private bool hasInited = false;
 
-		private string mapBriefUrl;
-		private XmlDocument mapBriefXml;
-		private Dictionary<string, XmlDocument> mapSceneName2XmlDoc = new Dictionary<string, XmlDocument>();
+		private MapInfoOperator mapInfoOperator = new MapInfoOperator();
 
 		private HashSet<string> loadingSceneName = new HashSet<string>();
 		private HashSet<string> loadedSceneName = new HashSet<string>();
 		private HashSet<string> curActiveScenes = new HashSet<string>();
 		private string sceneNameWhichPlayerIn = null;
-		private int unitXSize = 0;
-		private int unitZSize = 0;
-		private delegate bool SceneUnitSearcher(MapNodeInfo mapNodInfo, in List<SceneUnit> sceneUnits);
+		private delegate bool SceneUnitSearcher(MapInfo mapINfo, in List<SceneUnit> sceneUnits);
 
 
 		private void Awake()
@@ -85,8 +81,7 @@ namespace GameCtrl
 			if(playerTransfrom != null)
 			{
 				SceneUnit sceneUnit = GetSceneUint(playerTransfrom.position);
-				unitZSize = sceneUnit.unitZSize;
-				unitXSize = sceneUnit.unitXSize;
+
 				if(sceneUnit.sceneName != null)
 				{
 					sceneNameWhichPlayerIn = sceneUnit.sceneName;
@@ -164,6 +159,7 @@ namespace GameCtrl
 		private List<SceneUnit> GetNeighbourSceneUnit(SceneUnit sceneUnit)
 		{
 			List<SceneUnit> ret = new List<SceneUnit>();
+			List<MapInfo> mapInfoList = mapInfoOperator.SelectAllMapInfo();
 			if(sceneUnit.isValid())
 			{
 				List<Tuple<int, int>> neighbourIndxes = new List<Tuple<int, int>>();
@@ -180,7 +176,7 @@ namespace GameCtrl
 				neighbourIndxes.Add(new Tuple<int, int>(sceneUnit.globalXIdx , sceneUnit.globalZIdx + 1));
 				neighbourIndxes.Add(new Tuple<int, int>(sceneUnit.globalXIdx, sceneUnit.globalZIdx - 1));
 
-				ret = SearchMapBriefXml((MapNodeInfo mapNodeInfo, in List<SceneUnit> sceneUnits) => {
+				ret = SearchMapInfoList(mapInfoList,(MapInfo mapNodeInfo, in List<SceneUnit> sceneUnits) => {
 					for(int i =0; i<neighbourIndxes.Count; i++)
 					{
 						Tuple<int, int> xAndZ = neighbourIndxes[i];
@@ -193,7 +189,7 @@ namespace GameCtrl
 							&& mapNodeInfo.globalZIdx + mapNodeInfo.zCount - 1 >= z)
 						{
 							SceneUnit unit;
-							unit.sceneName = mapNodeInfo.name;
+							unit.sceneName = mapNodeInfo.mapName;
 							unit.globalXIdx = x;
 							unit.globalZIdx = z;
 							unit.localXIdx = unit.globalXIdx - mapNodeInfo.globalXIdx;
@@ -224,24 +220,23 @@ namespace GameCtrl
 			int curX =(int) vector.x;
 			int curZ = (int)vector.z;
 
-			int mapTotalCnt = mapBriefXml.GetElementsByTagName("MapNode").Count;
-			int unitXSize = Int32.Parse( mapBriefXml.GetElementsByTagName("UnitXSize").Item(0).InnerText);
-			int unitZSize = Int32.Parse(mapBriefXml.GetElementsByTagName("UnitZSize").Item(0).InnerText);
+			List<MapInfo> mapInfoList = mapInfoOperator.SelectAllMapInfo();
+			int mapTotalCnt = mapInfoList.Count;
 
 			ret.sceneName = null;
 			ret.localXIdx = -1;
 			ret.localZIdx = -1;
 			ret.globalXIdx = -1;
 			ret.globalZIdx = -1;
-			ret.unitXSize = unitXSize;
-			ret.unitZSize = unitZSize;
+			ret.unitXSize = -1;
+			ret.unitZSize = -1;
 
 
-			SearchMapBriefXml((MapNodeInfo mapNodInfo, in List<SceneUnit> sceneUnits) => {
+			SearchMapInfoList(mapInfoList, (MapInfo mapNodInfo, in List<SceneUnit> sceneUnits) => {
 				int minX = mapNodInfo.globalXIdx * mapNodInfo.unitXSize;
 				int maxX = minX + mapNodInfo.xCount * mapNodInfo.unitXSize;
 
-				int minZ = mapNodInfo.globalZIdx * mapNodInfo.unitZSize;
+				int minZ = mapNodInfo.globalZIdx * mapNodInfo.unitXSize;
 				int maxZ = minZ + mapNodInfo.zCount * mapNodInfo.unitZSize;
 
 				if (curX >= minX
@@ -249,10 +244,10 @@ namespace GameCtrl
 					&& curZ >= minZ
 					&& curZ <= maxZ)
 				{
-					ret.sceneName = mapNodInfo.name;
+					ret.sceneName = mapNodInfo.mapName;
 
-					ret.globalXIdx = curX / unitXSize;
-					ret.globalZIdx = curZ / unitZSize;
+					ret.globalXIdx = curX / mapNodInfo.unitXSize;
+					ret.globalZIdx = curZ / mapNodInfo.unitZSize;
 
 					ret.localXIdx = ret.globalXIdx - mapNodInfo.globalXIdx;
 					ret.localZIdx = ret.globalZIdx - mapNodInfo.globalZIdx;
@@ -270,38 +265,17 @@ namespace GameCtrl
 			return ret;
 		}
 
-		private List<SceneUnit> SearchMapBriefXml( SceneUnitSearcher seacher)
+		private List<SceneUnit> SearchMapInfoList(List<MapInfo> mapInfoList, SceneUnitSearcher seacher)
 		{
 			List<SceneUnit> ret = new List<SceneUnit>();
-			int mapTotalCnt = mapBriefXml.GetElementsByTagName("MapNode").Count;
-			int unitXSize = Int32.Parse(mapBriefXml.GetElementsByTagName("UnitXSize").Item(0).InnerText);
-			int unitZSize = Int32.Parse(mapBriefXml.GetElementsByTagName("UnitZSize").Item(0).InnerText);
-
-			for (int i = 0; i < mapTotalCnt; i++)
+			for(int i =0; i<mapInfoList.Count;i++)
 			{
-				XmlNode node = mapBriefXml.GetElementsByTagName("MapNode").Item(i);
-				XmlElement element = (XmlElement)node;
-				string mapName = element.GetAttribute("name");
-				int xCount = Int32.Parse(element.GetAttribute("XCount"));
-				int zCount = Int32.Parse(element.GetAttribute("ZCount"));
-				int xIdx = Int32.Parse(element.GetAttribute("GlobalXIdx"));
-				int zIdx = Int32.Parse(element.GetAttribute("GlobalZIdx"));
-
-				MapNodeInfo mapNodeInfo;
-				mapNodeInfo.name = mapName;
-				mapNodeInfo.xCount = xCount;
-				mapNodeInfo.zCount = zCount;
-				mapNodeInfo.globalXIdx = xIdx;
-				mapNodeInfo.globalZIdx = zIdx;
-				mapNodeInfo.unitXSize = unitXSize;
-				mapNodeInfo.unitZSize = unitZSize;
-
-				if(seacher(mapNodeInfo, in ret))
+				MapInfo mapInfo = mapInfoList[i];
+				if(seacher(mapInfo, in ret))
 				{
 					break;
 				}
 			}
-
 			return ret;
 		}
 
@@ -311,12 +285,6 @@ namespace GameCtrl
 			{
 				return;
 			}
-
-			TextAsset  textAsset = Resources.Load<TextAsset>("MapInfo/MapBrief");
-			
-			mapBriefUrl = Application.dataPath+ "/Scenes/MapBrief.xml";
-			mapBriefXml = new XmlDocument();
-			mapBriefXml.LoadXml(textAsset.text);
 
 			SceneManager.sceneLoaded += OnSceneLoaded;
 			SceneManager.sceneUnloaded += OnSceneUnloaded;

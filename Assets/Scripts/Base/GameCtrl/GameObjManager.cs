@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +44,8 @@ namespace GameCtrl
 			}
 			GameObject characterRes = Resources.Load<GameObject>("Character/RPG-Character");
 			RuntimeAnimatorController animatorController = Resources.Load("Animator/CommonAnimatorController") as RuntimeAnimatorController;
+			
+			Type ctrlScript = Type.GetType("CharacterInputCtrl");
 			mainCamera = gameObject.AddComponent<Camera>();
 
 			Vector3 cameraPos = new Vector3(0, 30, 0);
@@ -78,10 +81,12 @@ namespace GameCtrl
 					character.transform.position = characterPos;
 					ScaleCharacter(character, characterHeight);
 
-				
-					
 
-					CharacterInputCtrl characterInputCtrl = character.AddComponent<CharacterInputCtrl>();
+
+
+					//CharacterInputCtrl characterInputCtrl = character.AddComponent<CharacterInputCtrl>();
+					AbsInputCtrl characterInputCtrl =(AbsInputCtrl) character.AddComponent(ctrlScript);
+
 					Animator animator = character.GetComponent<Animator>();
 
 					if (animator)

@@ -10,6 +10,9 @@ namespace GameCtrl
 
 		protected List<KeyValuePair<AbsAction, ParamCollector>> action2InputJudge = new List<KeyValuePair<AbsAction, ParamCollector>>();
 
+		public float angleStep = 1.0f;
+		public float walkSpeed = 1.27f;
+		public float runSpeed = 2.70f;
 
 
 		public virtual void Awake()
