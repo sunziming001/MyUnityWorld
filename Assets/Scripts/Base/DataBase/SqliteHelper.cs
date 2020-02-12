@@ -21,7 +21,6 @@ namespace DataBase
 		{
 
 			db_connection_string = "URI=file:" + GetDBAbsoluteFilePath();
-			Debug.Log("db_connection_string" + db_connection_string);
 			db_connection = new SqliteConnection(db_connection_string);
 
 		}

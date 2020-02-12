@@ -12,8 +12,7 @@ namespace GameCtrl
 		private static string KeyStartAttack = "KeyStartAttack";
 
 		private bool isMoving = false;
-		private WeaponType weaponType = WeaponType.Relax;
-		
+		private Dictionary<string, bool> triggerName2IsTriggered = new Dictionary<string, bool>();
 
 		AnimatorAction()
 		{
@@ -50,7 +49,7 @@ namespace GameCtrl
 			return param.GetParam<bool>(AnimatorAction.KeyStartAttack);
 		}
 
-		
+
 		void OnAttackFinished()
 		{
 
@@ -65,13 +64,29 @@ namespace GameCtrl
 		}
 
 
-		void AutoResetTrigger(string triggerName, float resetSeconds = 0.0f)
+		bool AutoResetTrigger(string triggerName, float resetSeconds = 0.0f)
 		{
 			Animator anim = GetComponent<Animator>();
-			anim.SetTrigger(triggerName);
+			bool isTriggered = false;
 
-			StartCoroutine(DelayResetTrigger(triggerName, resetSeconds));
+			if (triggerName2IsTriggered.TryGetValue(triggerName, out isTriggered) == false)
+			{
+				triggerName2IsTriggered.Add(triggerName, false);
+				isTriggered = false;
+			}
 
+			if (!isTriggered)
+			{
+				anim.SetTrigger(triggerName);
+				triggerName2IsTriggered.Remove(triggerName);
+				triggerName2IsTriggered.Add(triggerName, true);
+				StartCoroutine(DelayResetTrigger(triggerName, resetSeconds));
+			}
+
+
+
+
+			return true;
 		}
 
 		IEnumerator DelayResetTrigger(string triggerName, float resetSeconds)
@@ -79,6 +94,9 @@ namespace GameCtrl
 			Animator anim = GetComponent<Animator>();
 			yield return new WaitForSeconds(resetSeconds);
 			anim.ResetTrigger(triggerName);
+
+			triggerName2IsTriggered.Remove(triggerName);
+			triggerName2IsTriggered.Add(triggerName, false);
 		}
 
 		void Hit()
@@ -93,37 +111,54 @@ namespace GameCtrl
 
 		public bool IsDuringAttack()
 		{
-			Animator anim = GetComponent<Animator>(); ;
+			Animator anim = GetComponent<Animator>();
 			return anim.GetBool("IsDuringAttack");
 		}
+
+		public bool IsDuringSwitchWeapon()
+		{
+			bool ret = false;
+
+			triggerName2IsTriggered.TryGetValue("SwithWeaponTriggered", out ret);
+			return ret;
+		}
+
 
 		protected override void OnActionExecuteUpdate()
 		{
 			base.OnActionExecuteUpdate();
-
+			Animator anim = GetComponent<Animator>();
 			ActionParam param = GetActionParam();
+
 			isMoving = GetIsMoving(param);
 			bool isStartAttack = GetStartAttack(param);
 			WeaponType newWeaponType = GetWeaponType(param);
+			WeaponType weaponType = (WeaponType)anim.GetInteger("WeaponType");
 
-			Animator anim = GetComponent<Animator>();
+			
 			anim.SetBool("isMoving", isMoving);
 
-			if(newWeaponType != weaponType
-				&& !IsDuringAttack())
+			if (newWeaponType != weaponType
+				&& !IsDuringAttack())                               //switch weapon
 			{
-				anim.SetInteger("WeaponType", (int)newWeaponType);
-				AutoResetTrigger("SwithWeaponTriggered");
-				weaponType = newWeaponType;
+				if (AutoResetTrigger("SwithWeaponTriggered", 0.5f))
+				{
+					anim.SetInteger("WeaponType", (int)newWeaponType);
+					weaponType = newWeaponType;
+				}
+
+			}
+			else if (isStartAttack
+				&& !IsDuringAttack()
+				&& weaponType != WeaponType.Relax)              //trigger attack
+			{
+				if (AutoResetTrigger("StartAttack", 1.0f))
+				{
+					anim.SetBool("IsDuringAttack", true);
+					anim.SetBool("isMoving", false);
+				}
 			}
 
-			if (isStartAttack
-				&& weaponType != WeaponType.Relax)
-			{
-				anim.SetBool("IsDuringAttack", true);
-				anim.SetBool("isMoving", false);
-				AutoResetTrigger("StartAttack",1.0f);
-			}
 
 		}
 

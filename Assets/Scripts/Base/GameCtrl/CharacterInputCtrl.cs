@@ -59,7 +59,7 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	void AnimatorInput(InputInfo inputInfo, in ActionParam param)
 	{
 		AnimatorAction.SetActionParamValid(param, true);
-
+		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
 		bool isMoving = false;
 		var cmd2Arg = inputInfo.inputCmd2Arg;
 		object tmpValue;
@@ -71,16 +71,23 @@ public class CharacterInputCtrl :  AbsInputCtrl
 		}
 		
 
-		if(cmd2Arg.TryGetValue(InputCmd.Relax, out tmpValue))
+		
+		if(animatorAction.IsDuringSwitchWeapon())
+		{
+			AnimatorAction.SetWeaponType(param, animatorAction.GetCurWeaponType());
+		}
+		else if (cmd2Arg.TryGetValue(InputCmd.Relax, out tmpValue))
 		{
 			AnimatorAction.SetWeaponType(param, WeaponType.Relax);
 		}
-		else if(cmd2Arg.TryGetValue(InputCmd.EquipWeapon, out tmpValue))
+		else if (cmd2Arg.TryGetValue(InputCmd.EquipWeapon, out tmpValue))
 		{
 			AnimatorAction.SetWeaponType(param, WeaponType.TwoHandSword);
 		}
 
-		if(cmd2Arg.TryGetValue(InputCmd.LightAttack, out tmpValue))
+
+
+		if (cmd2Arg.TryGetValue(InputCmd.LightAttack, out tmpValue))
 		{
 			AnimatorAction.SetStartAttack(param, true);
 		}
@@ -98,7 +105,6 @@ public class CharacterInputCtrl :  AbsInputCtrl
 	{
 		WeaponAction.SetActionParamValid(param, true);
 		WeaponAction.WeaponInfo info;
-		var cmd2Arg = inputInfo.inputCmd2Arg;
 	
 		AnimatorAction animatorAction = GetComponent<AnimatorAction>();
 		if(animatorAction)
